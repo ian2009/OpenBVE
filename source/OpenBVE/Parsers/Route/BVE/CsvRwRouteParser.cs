@@ -4831,8 +4831,7 @@ namespace OpenBve {
 														int n = Data.Blocks[BlockIndex].SoundEvents.Length;
 														Array.Resize<Sound>(ref Data.Blocks[BlockIndex].SoundEvents, n + 1);
 														Data.Blocks[BlockIndex].SoundEvents[n].TrackPosition = Data.TrackPosition;
-														const double radius = 15.0;
-														Data.Blocks[BlockIndex].SoundEvents[n].SoundBuffer = Sounds.RegisterBuffer(f, radius);
+														Data.Blocks[BlockIndex].SoundEvents[n].SoundBuffer = Sounds.RegisterBuffer(f, 15.0);
 														Data.Blocks[BlockIndex].SoundEvents[n].Type = speed == 0.0 ? SoundType.TrainStatic : SoundType.TrainDynamic;
 														Data.Blocks[BlockIndex].SoundEvents[n].Speed = speed * Data.UnitOfSpeed;
 													}
@@ -4865,17 +4864,32 @@ namespace OpenBve {
 														int n = Data.Blocks[BlockIndex].SoundEvents.Length;
 														Array.Resize<Sound>(ref Data.Blocks[BlockIndex].SoundEvents, n + 1);
 														Data.Blocks[BlockIndex].SoundEvents[n].TrackPosition = Data.TrackPosition;
-														const double radius = 15.0;
-														Data.Blocks[BlockIndex].SoundEvents[n].SoundBuffer = Sounds.RegisterBuffer(f, radius);
+														Data.Blocks[BlockIndex].SoundEvents[n].SoundBuffer = Sounds.RegisterBuffer(f, 15.0);
 														Data.Blocks[BlockIndex].SoundEvents[n].Type = SoundType.World;
-														Data.Blocks[BlockIndex].SoundEvents[n].X = x;
-														Data.Blocks[BlockIndex].SoundEvents[n].Y = y;
-														Data.Blocks[BlockIndex].SoundEvents[n].Radius = radius;
+														Data.Blocks[BlockIndex].SoundEvents[n].Position.X = x;
+														Data.Blocks[BlockIndex].SoundEvents[n].Position.Y = y;
 													}
 												}
 											}
 										}
 									} break;
+								case "track.soundx":
+									if (!PreviewOnly)
+									{
+										if (Arguments.Length != 1)
+										{
+											Interface.AddMessage(Interface.MessageType.Error, false, Command + " is expected to have 1 argument at line " + Expressions[j].Line.ToString(Culture) + ", column " + Expressions[j].Column.ToString(Culture) + " in file " + Expressions[j].File);
+											break;
+										}
+										string xmlFile = Path.CombineFile(SoundPath, Arguments[0]);
+										if (System.IO.File.Exists(xmlFile))
+										{
+											int n = Data.Blocks[BlockIndex].SoundEvents.Length;
+											Array.Resize<Sound>(ref Data.Blocks[BlockIndex].SoundEvents, n + 1);
+											Data.Blocks[BlockIndex].SoundEvents[n] = new Sound(xmlFile, Data.TrackPosition, Data.UnitOfSpeed);
+										}
+									}
+									break;
 								case "track.pretrain":
 									{
 										if (!PreviewOnly) {

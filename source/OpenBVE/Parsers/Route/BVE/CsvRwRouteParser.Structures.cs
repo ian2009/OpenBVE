@@ -128,22 +128,7 @@
 		}
 		private enum SoundType { World, TrainStatic, TrainDynamic }
 
-		private struct Sound
-		{
-			internal double TrackPosition;
-			internal Sounds.SoundBuffer SoundBuffer;
-			internal SoundType Type;
-			internal double X;
-			internal double Y;
-			//TODO:
-			//This is always set to a constant 15.0 on loading a sound, and never touched again
-			//I presume Michelle intended to have sounds with different radii available
-			//This would require a custom or extended command which allowed the radius value to be set
-#pragma warning disable 414
-			internal double Radius;
-#pragma warning restore 414
-			internal double Speed;
-		}
+		
 		private struct Transponder
 		{
 			internal double TrackPosition;

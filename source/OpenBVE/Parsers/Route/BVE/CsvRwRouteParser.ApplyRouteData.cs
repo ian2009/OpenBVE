@@ -470,10 +470,10 @@ namespace OpenBve
 							switch (Data.Blocks[i].SoundEvents[j].Type)
 							{
 								case SoundType.TrainStatic:
-									TrackManager.CurrentTrack.Elements[n].Events[m] = new TrackManager.SoundEvent(d, Data.Blocks[i].SoundEvents[j].SoundBuffer, true, true, false, new Vector3(0.0, 0.0, 0.0), 0.0);
+									TrackManager.CurrentTrack.Elements[n].Events[m] = new TrackManager.SoundEvent(d, Data.Blocks[i].SoundEvents[j].SoundBuffer, true, true, false, Data.Blocks[i].SoundEvents[j].Position, 0.0);
 									break;
 								case SoundType.TrainDynamic:
-									TrackManager.CurrentTrack.Elements[n].Events[m] = new TrackManager.SoundEvent(d, Data.Blocks[i].SoundEvents[j].SoundBuffer, false, false, true, new Vector3(0.0, 0.0, 0.0), Data.Blocks[i].SoundEvents[j].Speed);
+									TrackManager.CurrentTrack.Elements[n].Events[m] = new TrackManager.SoundEvent(d, Data.Blocks[i].SoundEvents[j].SoundBuffer, false, false, true, Data.Blocks[i].SoundEvents[j].Position, Data.Blocks[i].SoundEvents[j].Speed);
 									break;
 							}
 						}
@@ -781,8 +781,8 @@ namespace OpenBve
 									if (Data.Blocks[i].SoundEvents[k].SoundBuffer != null)
 									{
 										double d = Data.Blocks[i].SoundEvents[k].TrackPosition - StartingDistance;
-										double dx = Data.Blocks[i].SoundEvents[k].X;
-										double dy = Data.Blocks[i].SoundEvents[k].Y;
+										double dx = Data.Blocks[i].SoundEvents[k].Position.X;
+										double dy = Data.Blocks[i].SoundEvents[k].Position.Y;
 										double wa = Math.Atan2(Direction.Y, Direction.X) - planar;
 										double wx = Math.Cos(wa);
 										double wy = Math.Tan(updown);
