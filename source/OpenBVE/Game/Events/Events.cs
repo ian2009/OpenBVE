@@ -34,5 +34,16 @@
 				}
 			}
 		}
+
+		/// <summary>The available trigger types for a triggered event</summary>
+		internal enum TriggerType
+		{
+			/// <summary>The event is triggered by the player train</summary>
+			PlayerTrain = 0,
+			/// <summary>The event is triggered by AI Trains</summary>
+			AITrain = 1,
+			/// <summary>The event is triggered by all trains</summary>
+			AllTrains = 2,
+		}
 	}
 }

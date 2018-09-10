@@ -4834,6 +4834,7 @@ namespace OpenBve {
 														Data.Blocks[BlockIndex].SoundEvents[n].SoundBuffer = Sounds.RegisterBuffer(f, 15.0);
 														Data.Blocks[BlockIndex].SoundEvents[n].Type = speed == 0.0 ? SoundType.TrainStatic : SoundType.TrainDynamic;
 														Data.Blocks[BlockIndex].SoundEvents[n].Speed = speed * Data.UnitOfSpeed;
+														Data.Blocks[BlockIndex].SoundEvents[n].TriggerType = TrackManager.TriggerType.PlayerTrain;
 													}
 												}
 											}
@@ -4868,6 +4869,7 @@ namespace OpenBve {
 														Data.Blocks[BlockIndex].SoundEvents[n].Type = SoundType.World;
 														Data.Blocks[BlockIndex].SoundEvents[n].Position.X = x;
 														Data.Blocks[BlockIndex].SoundEvents[n].Position.Y = y;
+														Data.Blocks[BlockIndex].SoundEvents[n].TriggerType = TrackManager.TriggerType.AllTrains;
 													}
 												}
 											}

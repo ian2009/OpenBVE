@@ -12,12 +12,14 @@ namespace OpenBve
 			internal double TrackPosition;
 			internal Sounds.SoundBuffer SoundBuffer;
 			internal SoundType Type;
+			internal TrackManager.TriggerType TriggerType;
 			internal Vector3 Position;
 			internal double Speed;
 
 			internal Sound(string xmlFile, double trackPosition, double speedConversionFactor) : this()
 			{
 				TrackPosition = trackPosition;
+				TriggerType = TrackManager.TriggerType.PlayerTrain; //Set by default to trigger from the player train only
 				string fn = String.Empty; //Never actually empty, but we need to initialise the variable
 				double radius = 15.0, speed = 0.0;
 				Vector3 position = new Vector3();
@@ -91,7 +93,26 @@ namespace OpenBve
 											{
 												Interface.AddMessage(Interface.MessageType.Warning, false, "Sound speed was invalid in XML sound " + xmlFile);
 											}
-
+											break;
+										case "triggertype":
+											switch (c.InnerText.ToLowerInvariant())
+											{
+												case "0":
+												case "player":
+													TriggerType = TrackManager.TriggerType.PlayerTrain;
+													break;
+												case "1":
+												case "ai":
+													TriggerType = TrackManager.TriggerType.AITrain;
+													break;
+												case "2":
+												case "all":
+													TriggerType = TrackManager.TriggerType.AllTrains;
+													break;
+												default:
+													Interface.AddMessage(Interface.MessageType.Warning, false, "Sound trigger type was invalid in XML sound " + xmlFile);
+													break;
+											}
 											break;
 									}
 								}

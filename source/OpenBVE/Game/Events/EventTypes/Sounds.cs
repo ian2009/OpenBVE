@@ -11,7 +11,7 @@ namespace OpenBve
 			/// <summary>The sound buffer to play</summary>
 			private readonly Sounds.SoundBuffer SoundBuffer;
 			/// <summary>Whether this sound is triggered by the player train only, or all trains</summary>
-			private readonly bool PlayerTrainOnly;
+			private readonly TriggerType Triggers;
 			/// <summary>Whether this sound should play once, or repeat if triggered again</summary>
 			private readonly bool Once;
 			private readonly bool Dynamic;
@@ -23,17 +23,17 @@ namespace OpenBve
 			/// <param name="TrackPositionDelta">The delta position of the sound within a track block.</param>
 			/// <param name="SoundBuffer">The sound buffer to play. 
 			/// HACK: Set to a null reference to indicate the train point sound.</param>
-			/// <param name="PlayerTrainOnly">Defines whether this sound is played for the player's train only, or for player and AI trains</param>
+			/// <param name="EventTriggers">Defines the triggers for this event</param>
 			/// <param name="Once">Defines whether this sound repeats looped, or plays once</param>
 			/// <param name="Dynamic">Whether this sound is dynamic (Attached to a train)</param>
 			/// <param name="Position">The position of the sound relative to it's track location</param>
 			/// <param name="Speed">The speed in km/h at which this sound is played at it's original pitch (Set to zero to play at original pitch at all times)</param>
-			internal SoundEvent(double TrackPositionDelta, Sounds.SoundBuffer SoundBuffer, bool PlayerTrainOnly, bool Once, bool Dynamic, Vector3 Position, double Speed)
+			internal SoundEvent(double TrackPositionDelta, Sounds.SoundBuffer SoundBuffer, TriggerType EventTriggers, bool Once, bool Dynamic, Vector3 Position, double Speed)
 			{
 				this.TrackPositionDelta = TrackPositionDelta;
 				this.DontTriggerAnymore = false;
 				this.SoundBuffer = SoundBuffer;
-				this.PlayerTrainOnly = PlayerTrainOnly;
+				this.Triggers = EventTriggers;
 				this.Once = Once;
 				this.Dynamic = Dynamic;
 				this.Position = Position;
@@ -50,31 +50,36 @@ namespace OpenBve
 				if (SuppressSoundEvents) return;
 				if (TriggerType == EventTriggerType.FrontCarFrontAxle | TriggerType == EventTriggerType.OtherCarFrontAxle | TriggerType == EventTriggerType.OtherCarRearAxle | TriggerType == EventTriggerType.RearCarRearAxle)
 				{
-					if (!PlayerTrainOnly | Train == TrainManager.PlayerTrain)
+					if (Train != TrainManager.PlayerTrain && Triggers == TrackManager.TriggerType.AITrain || Train == TrainManager.PlayerTrain && Triggers == TrackManager.TriggerType.PlayerTrain)
 					{
-						Vector3 p = this.Position;
-						double pitch = 1.0;
-						double gain = 1.0;
-						Sounds.SoundBuffer buffer = this.SoundBuffer;
-						if (buffer != null)
+						return;
+					}
+
+					Vector3 p = this.Position;
+					double pitch = 1.0;
+					double gain = 1.0;
+					Sounds.SoundBuffer buffer = this.SoundBuffer;
+					if (buffer != null)
+					{
+						if (this.Dynamic)
 						{
-							if (this.Dynamic)
+							double spd = Math.Abs(Train.Specs.CurrentAverageSpeed);
+							pitch = spd / this.Speed;
+							gain = pitch < 0.5 ? 2.0 * pitch : 1.0;
+							if (pitch < 0.2 | gain < 0.2)
 							{
-								double spd = Math.Abs(Train.Specs.CurrentAverageSpeed);
-								pitch = spd / this.Speed;
-								gain = pitch < 0.5 ? 2.0 * pitch : 1.0;
-								if (pitch < 0.2 | gain < 0.2)
-								{
-									buffer = null;
-								}
-							}
-							if (buffer != null)
-							{
-								Sounds.PlaySound(buffer, pitch, gain, p, Train, CarIndex, false);
+								buffer = null;
 							}
 						}
-						this.DontTriggerAnymore = this.Once;
+
+						if (buffer != null)
+						{
+							Sounds.PlaySound(buffer, pitch, gain, p, Train, CarIndex, false);
+						}
 					}
+
+					this.DontTriggerAnymore = this.Once;
+					
 				}
 			}
 		}
