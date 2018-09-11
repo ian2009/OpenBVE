@@ -24,6 +24,25 @@ namespace OpenBve {
 			internal FunctionScripts.FunctionScript VolumeFunction;
 
 			internal double InternalVolumeFactor;
+			/// <summary>Sets the amount of trailing silence to be played after this sound when looping</summary>
+			internal double TrailingSilence;
+
+			/// <summary>Creates a new sound buffer</summary>
+			/// <param name="path">The on-disk path to the sound to load</param>
+			/// <param name="radius">The radius for this sound</param>
+			/// <param name="trailingSilence">The amount of trailing silence to play</param>
+			internal SoundBuffer(string path, double radius, double trailingSilence) {
+				this.Origin = new PathOrigin(path);
+				this.Radius = radius;
+				this.Loaded = false;
+				this.OpenAlBufferName = 0;
+				this.Duration = 0.0;
+				this.InternalVolumeFactor = 0.5;
+				this.Ignore = false;
+				this.PitchFunction = null;
+				this.VolumeFunction = null;
+				this.TrailingSilence = trailingSilence;
+			}
 
 			/// <summary>Creates a new sound buffer</summary>
 			/// <param name="path">The on-disk path to the sound to load</param>
@@ -38,7 +57,7 @@ namespace OpenBve {
 				this.Ignore = false;
 				this.PitchFunction = null;
 				this.VolumeFunction = null;
-				
+				this.TrailingSilence = 0.0;
 			}
 
 			/// <summary>Creates a new sound buffer</summary>
@@ -54,6 +73,7 @@ namespace OpenBve {
 				this.Ignore = false;
 				this.PitchFunction = null;
 				this.VolumeFunction = null;
+				this.TrailingSilence = 0.0;
 			}
 			/// <summary>Creates a new uninitialized sound buffer</summary>
 			internal SoundBuffer()
@@ -67,6 +87,7 @@ namespace OpenBve {
 				this.Ignore = false;
 				this.PitchFunction = null;
 				this.VolumeFunction = null;
+				this.TrailingSilence = 0.0;
 			}
 
 			internal SoundBuffer(SoundOrigin origin)
@@ -80,6 +101,7 @@ namespace OpenBve {
 				this.Ignore = false;
 				this.PitchFunction = null;
 				this.VolumeFunction = null;
+				this.TrailingSilence = 0.0;
 			}
 
 			/// <summary>Creates a clone of the specified sound buffer</summary>
@@ -96,7 +118,8 @@ namespace OpenBve {
 					InternalVolumeFactor = b.InternalVolumeFactor,
 					Ignore = false,
 					PitchFunction = b.PitchFunction,
-					VolumeFunction = b.VolumeFunction
+					VolumeFunction = b.VolumeFunction,
+					TrailingSilence = b.TrailingSilence
 				};
 			}
 

@@ -21,7 +21,7 @@ namespace OpenBve
 				TrackPosition = trackPosition;
 				TriggerType = TrackManager.TriggerType.PlayerTrain; //Set by default to trigger from the player train only
 				string fn = String.Empty; //Never actually empty, but we need to initialise the variable
-				double radius = 15.0, speed = 0.0;
+				double radius = 15.0, speed = 0.0, trailingSilence = 0.0; //Default values for a sound
 				Vector3 position = new Vector3();
 				bool looped = false;
 				//The current XML file to load
@@ -114,14 +114,25 @@ namespace OpenBve
 													break;
 											}
 											break;
+										case "repetitioninterval":
+											if (!NumberFormats.TryParseDoubleVb6(c.InnerText, out trailingSilence))
+											{
+												Interface.AddMessage(Interface.MessageType.Warning, false, "Repetition interval was invalid in XML sound " + xmlFile);
+											}
+											break;
 									}
 								}
 							}
 						}
 					}
 				}
+
+				if (trailingSilence != 0.0 && !looped)
+				{
+					Interface.AddMessage(Interface.MessageType.Warning, false, "A repetition interval was set, but the sound is not looped in XML sound " + xmlFile);
+				}
 				//Data has been collected so setup the actual sound
-				SoundBuffer = Sounds.RegisterBuffer(fn, radius);
+				SoundBuffer = Sounds.RegisterBuffer(fn, radius, trailingSilence);
 				Position = position;
 				if (looped)
 				{

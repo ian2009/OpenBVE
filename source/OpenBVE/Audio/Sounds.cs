@@ -135,7 +135,7 @@ namespace OpenBve
 		{
 			for (int i = 0; i < BufferCount; i++)
 			{
-				if (!(Buffers[i].Origin is PathOrigin)) continue;
+				if (!(Buffers[i].Origin is PathOrigin) || Buffers[i].TrailingSilence != 0.0) continue;
 				if (((PathOrigin)Buffers[i].Origin).Path == path)
 				{
 					return Buffers[i];
@@ -146,6 +146,30 @@ namespace OpenBve
 				Array.Resize<SoundBuffer>(ref Buffers, Buffers.Length << 1);
 			}
 			Buffers[BufferCount] = new SoundBuffer(path, radius);
+			BufferCount++;
+			return Buffers[BufferCount - 1];
+		}
+
+		/// <summary>Registers a sound buffer and returns a handle to the buffer.</summary>
+		/// <param name="path">The path to the sound.</param>
+		/// <param name="radius">The default effective radius.</param>
+		/// <param name="trailingSilence">The amount of trailing silence to play whilst looping this sound</param>
+		/// <returns>The handle to the sound buffer.</returns>
+		internal static SoundBuffer RegisterBuffer(string path, double radius, double trailingSilence)
+		{
+			for (int i = 0; i < BufferCount; i++)
+			{
+				if (!(Buffers[i].Origin is PathOrigin) || Buffers[i].TrailingSilence != trailingSilence) continue;
+				if (((PathOrigin)Buffers[i].Origin).Path == path)
+				{
+					return Buffers[i];
+				}
+			}
+			if (Buffers.Length == BufferCount)
+			{
+				Array.Resize<SoundBuffer>(ref Buffers, Buffers.Length << 1);
+			}
+			Buffers[BufferCount] = new SoundBuffer(path, radius, trailingSilence);
 			BufferCount++;
 			return Buffers[BufferCount - 1];
 		}
@@ -189,6 +213,17 @@ namespace OpenBve
 					byte[] bytes = GetMonoMix(sound);
 					AL.GenBuffers(1, out buffer.OpenAlBufferName);
 					ALFormat format = sound.BitsPerSample == 8 ? ALFormat.Mono8 : ALFormat.Mono16;
+					if (buffer.TrailingSilence != 0)
+					{
+						int sampleCount = (int)(buffer.TrailingSilence * sound.SampleRate);
+						int b = bytes.Length;
+						Array.Resize(ref bytes, b + sampleCount);
+						for (int i = b; i < bytes.Length; i++)
+						{
+							bytes[i] = 0;
+						}
+
+					}
 					AL.BufferData(buffer.OpenAlBufferName, format, bytes, bytes.Length, sound.SampleRate);
 					buffer.Duration = sound.Duration;
 					buffer.Loaded = true;
