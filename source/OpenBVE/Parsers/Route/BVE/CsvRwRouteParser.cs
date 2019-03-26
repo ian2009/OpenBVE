@@ -63,6 +63,7 @@ namespace OpenBve {
 				Data.Blocks[0].Fog.End = Game.NoFogEnd;
 				Data.Blocks[0].Fog.Color = Color24.Grey;
 				Data.Blocks[0].Cycle = new int[] {-1};
+				Data.Blocks[0].Switches = new Switch[] {};
 				Data.Blocks[0].RailCycles = new RailCycle[1];
 				Data.Blocks[0].RailCycles[0].RailCycleIndex = -1;
 				Data.Blocks[0].Height = IsRW ? 0.3 : 0.0;
@@ -2856,7 +2857,56 @@ namespace OpenBve {
 								case "route.displayspeed":
 								case "route.othertrainxml":
 									break;
-									// track
+								// track
+								case "track.switch":
+									if (!PreviewOnly)
+									{
+										int idx = 0;
+										if (Arguments.Length >= 1 && Arguments[0].Length > 0 && !NumberFormats.TryParseIntVb6(Arguments[0], out idx))
+										{
+											Interface.AddMessage(MessageType.Error, false, "RailIndex is invalid in " + Command + " at line " + Expressions[j].Line.ToString(Culture) + ", column " + Expressions[j].Column.ToString(Culture) + " in file " + Expressions[j].File);
+											break;
+										}
+										if (idx < 0)
+										{
+											Interface.AddMessage(MessageType.Error, false, "RailIndex is expected to be positive in " + Command + " at line " + Expressions[j].Line.ToString(Culture) + ", column " + Expressions[j].Column.ToString(Culture) + " in file " + Expressions[j].File);
+											break;
+										}
+										int idx1 = 0;
+										if (Arguments.Length >= 1 && Arguments[1].Length > 0 && !NumberFormats.TryParseIntVb6(Arguments[1], out idx1))
+										{
+											Interface.AddMessage(MessageType.Error, false, "RailIndex2 is invalid in " + Command + " at line " + Expressions[j].Line.ToString(Culture) + ", column " + Expressions[j].Column.ToString(Culture) + " in file " + Expressions[j].File);
+											break;
+										}
+										if (idx1 < 0)
+										{
+											Interface.AddMessage(MessageType.Error, false, "RailIndex2 is expected to be positive in " + Command + " at line " + Expressions[j].Line.ToString(Culture) + ", column " + Expressions[j].Column.ToString(Culture) + " in file " + Expressions[j].File);
+											break;
+										}
+
+										int initialSetting = idx;
+										if (Arguments.Length >= 1 && Arguments[2].Length > 0 && !NumberFormats.TryParseIntVb6(Arguments[2], out initialSetting))
+										{
+											Interface.AddMessage(MessageType.Error, false, "Initial setting for Switch is invalid in " + Command + " at line " + Expressions[j].Line.ToString(Culture) + ", column " + Expressions[j].Column.ToString(Culture) + " in file " + Expressions[j].File);
+											break;
+										}
+										if (initialSetting < 0)
+										{
+											Interface.AddMessage(MessageType.Error, false, "Initial setting for Switch is expected to be positive in " + Command + " at line " + Expressions[j].Line.ToString(Culture) + ", column " + Expressions[j].Column.ToString(Culture) + " in file " + Expressions[j].File);
+											initialSetting = idx;
+										}
+										if (Data.Blocks[BlockIndex].Switches.Length <= idx)
+										{
+											Array.Resize<Switch>(ref Data.Blocks[BlockIndex].Switches, idx + 1);
+										}
+
+										Data.Blocks[BlockIndex].Switches[idx] = new Switch
+										{
+											SecondTrack =  idx1,
+											InitialSetting = initialSetting
+										};
+									}
+									break;
 								case "track.railstart":
 								case "track.rail":
 									if (!PreviewOnly)

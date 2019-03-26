@@ -1,4 +1,5 @@
-﻿using OpenBveApi.Objects;
+﻿using System;
+using OpenBveApi.Objects;
 
 namespace OpenBve
 {
@@ -26,6 +27,14 @@ namespace OpenBve
 			internal int Type;
 			/// <summary>The direction the object(s) are placed in: -1 for left, 0 for both, 1 for right</summary>
 			internal int Direction;
+		}
+
+		private class Switch
+		{
+			/// <summary>The second track index</summary>
+			internal int SecondTrack;
+			/// <summary>The initial setting of the switch</summary>
+			internal int InitialSetting;
 		}
 		private struct FreeObj
 		{
@@ -204,6 +213,7 @@ namespace OpenBve
 			internal RailCycle[] RailCycles;
 			internal double Height;
 			internal Rail[] Rails;
+			internal Switch[] Switches;
 			internal int[] RailType;
 			internal WallDike[] RailWall;
 			internal WallDike[] RailDike;

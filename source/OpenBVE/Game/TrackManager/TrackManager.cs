@@ -15,7 +15,7 @@ namespace OpenBve
 		/// <param name="inaccuracy">The openBVE innacuaracy value</param>
 		/// <param name="x">The X (horizontal) co-ordinate to update</param>
 		/// <param name="y">The Y (vertical) co-ordinate to update</param>
-		/// <param name="c">???</param>
+		/// <param name="c">The curve cant</param>
 		private static void GetInaccuracies(double position, double inaccuracy, out double x, out double y, out double c)
 		{
 			if (inaccuracy <= 0.0)

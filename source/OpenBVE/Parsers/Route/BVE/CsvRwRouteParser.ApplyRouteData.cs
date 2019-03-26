@@ -522,6 +522,19 @@ namespace OpenBve
 				Transformation GroundTransformation = new Transformation(TrackYaw, 0.0, 0.0);
 				Transformation TrackTransformation = new Transformation(TrackYaw, TrackPitch, 0.0);
 				Transformation NullTransformation = new Transformation(0.0, 0.0, 0.0);
+				// switches
+				if (!PreviewOnly)
+				{
+					for (int j = 0; j < Data.Blocks[i].Switches.Length; j++)
+					{
+						if (Data.Blocks[i].Switches[j] != null)
+						{
+							int l = TrackManager.Tracks[j].Elements[n].Events.Length;
+							Array.Resize(ref TrackManager.Tracks[j].Elements[n].Events, l + 1);
+							TrackManager.Tracks[j].Elements[n].Events[l] = new TrackManager.SwitchEvent(new int[] { j, Data.Blocks[i].Switches[j].SecondTrack }, Data.Blocks[i].Switches[j].InitialSetting);
+						}
+					}
+				}
 				// ground
 				if (!PreviewOnly)
 				{

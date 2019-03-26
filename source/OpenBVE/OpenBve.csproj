@@ -131,6 +131,7 @@
     <Compile Include="Game\Events\EventTypes\Sounds.cs" />
     <Compile Include="Game\Events\EventTypes\SpeedLimit.cs" />
     <Compile Include="Game\Events\EventTypes\Station.cs" />
+    <Compile Include="Game\Events\EventTypes\Switch.cs" />
     <Compile Include="Game\Events\EventTypes\TrackEnd.cs" />
     <Compile Include="Game\Events\EventTypes\DestinationChange.cs" />
     <Compile Include="Game\Events\EventTypes\Transponder.cs" />

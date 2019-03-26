@@ -89,6 +89,7 @@ namespace OpenBve
 								}
 							}
 						}
+						Blocks[i].Switches = new Switch[] { };
 						Blocks[i].Rails = new Rail[Blocks[i - 1].Rails.Length];
 						for (int j = 0; j < Blocks[i].Rails.Length; j++)
 						{
