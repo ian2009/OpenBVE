@@ -565,7 +565,6 @@ namespace OpenBve
 				{
 					for (int j = 0; j < Data.Blocks[i].Rails.Length; j++)
 					{
-						if (j > 0 && !Data.Blocks[i].Rails[j].RailStart) continue;
 						// rail
 						Vector3 pos;
 						Transformation RailTransformation;
@@ -676,6 +675,17 @@ namespace OpenBve
 							TrackManager.Tracks[j].Elements[n].WorldUp = RailTransformation.Y;
 							TrackManager.Tracks[j].Elements[n].CurveCant = Data.Blocks[i].Rails[j].CurveCant;
 							TrackManager.Tracks[j].Elements[n].AdhesionMultiplier = Data.Blocks[i].AdhesionMultiplier;
+						}
+						if (j > 0 && !Data.Blocks[i].Rails[j].RailStart)
+						{
+							if (!Data.Blocks[i].Rails[j].RailStartRefreshed && Data.Blocks[i].Rails[j].RailEnd)
+							{
+								int l = TrackManager.Tracks[j].Elements[n].Events.Length;
+								Array.Resize(ref TrackManager.Tracks[j].Elements[n].Events, l + 1);
+								TrackManager.Tracks[j].Elements[n].Events[l] = new TrackManager.TrackEndEvent(Data.BlockInterval);
+							}
+							//In order to run on other tracks, we need to calculate the positions and stuff, so continue after here instead
+							continue;
 						}
 						if (Data.Structure.RailObjects.ContainsKey(Data.Blocks[i].RailType[j]))
 						{
