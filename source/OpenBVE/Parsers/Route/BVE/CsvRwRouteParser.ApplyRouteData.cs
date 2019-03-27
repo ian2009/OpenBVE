@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using OpenBveApi.Colors;
 using OpenBveApi.Math;
@@ -109,6 +109,7 @@ namespace OpenBve
 				}
 			}
 			// create objects and track
+			TrackManager.Switches = new TrackManager.Switch[] { };
 			Vector3 Position = Vector3.Zero;
 			Vector2 Direction = new Vector2(0.0, 1.0);
 			double CurrentSpeedLimit = double.PositiveInfinity;
@@ -529,9 +530,34 @@ namespace OpenBve
 					{
 						if (Data.Blocks[i].Switches[j] != null)
 						{
-							int l = TrackManager.Tracks[j].Elements[n].Events.Length;
-							Array.Resize(ref TrackManager.Tracks[j].Elements[n].Events, l + 1);
-							TrackManager.Tracks[j].Elements[n].Events[l] = new TrackManager.SwitchEvent(new int[] { j, Data.Blocks[i].Switches[j].SecondTrack }, Data.Blocks[i].Switches[j].InitialSetting);
+
+							int sl = TrackManager.Switches.Length;
+							Array.Resize(ref TrackManager.Switches, sl + 1);
+							
+							if (Data.Blocks[i].Switches[j].Trailing == false)
+							{
+								TrackManager.Switches[sl] = new TrackManager.Switch(new int[] { j, Data.Blocks[i].Switches[j].SecondTrack }, Data.Blocks[i].Switches[j].InitialSetting);
+								//Assign facing switch event
+								int l = TrackManager.Tracks[j].Elements[n].Events.Length;
+								Array.Resize(ref TrackManager.Tracks[j].Elements[n].Events, l + 1);
+								TrackManager.Tracks[j].Elements[n].Events[l] = new TrackManager.SwitchEvent(sl, 1);
+								//Assign trailing switch event
+								l = TrackManager.Tracks[Data.Blocks[i].Switches[j].SecondTrack].Elements[n].Events.Length;
+								Array.Resize(ref TrackManager.Tracks[Data.Blocks[i].Switches[j].SecondTrack].Elements[n].Events, l + 1);
+								TrackManager.Tracks[Data.Blocks[i].Switches[j].SecondTrack].Elements[n].Events[l] = new TrackManager.TrailingSwitchEvent(sl, j, -1);
+							}
+							else
+							{
+								TrackManager.Switches[sl] = new TrackManager.Switch(new int[] { Data.Blocks[i].Switches[j].SecondTrack, j }, Data.Blocks[i].Switches[j].InitialSetting);
+								//Assign trailing switch event
+								int l = TrackManager.Tracks[j].Elements[n].Events.Length;
+								Array.Resize(ref TrackManager.Tracks[j].Elements[n].Events, l + 1);
+								TrackManager.Tracks[j].Elements[n].Events[l] = new TrackManager.TrailingSwitchEvent(sl, Data.Blocks[i].Switches[j].SecondTrack, 1);
+								//Assign facing switch event
+								l = TrackManager.Tracks[Data.Blocks[i].Switches[j].SecondTrack].Elements[n].Events.Length;
+								Array.Resize(ref TrackManager.Tracks[Data.Blocks[i].Switches[j].SecondTrack].Elements[n].Events, l + 1);
+								TrackManager.Tracks[Data.Blocks[i].Switches[j].SecondTrack].Elements[n].Events[l] = new TrackManager.SwitchEvent(sl, -1);
+							}
 						}
 					}
 				}

@@ -2859,8 +2859,14 @@ namespace OpenBve {
 									break;
 								// track
 								case "track.switch":
+								case "track.switcht":
 									if (!PreviewOnly)
 									{
+										bool trailing = false;
+										if (Command.ToLowerInvariant() == "track.switcht")
+										{
+											trailing = true;
+										}
 										int idx = 0;
 										if (Arguments.Length >= 1 && Arguments[0].Length > 0 && !NumberFormats.TryParseIntVb6(Arguments[0], out idx))
 										{
@@ -2903,7 +2909,8 @@ namespace OpenBve {
 										Data.Blocks[BlockIndex].Switches[idx] = new Switch
 										{
 											SecondTrack =  idx1,
-											InitialSetting = initialSetting
+											InitialSetting = initialSetting,
+											Trailing = trailing
 										};
 									}
 									break;
