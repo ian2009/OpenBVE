@@ -21,6 +21,7 @@ namespace OpenBve
 			internal bool FogTransitionMode;
 			internal StructureData Structure;
 			internal SignalData[] Signals;
+			internal Interface.CompatibilitySignalType compatibilitySignalType = Interface.CompatibilitySignalType.Japanese;
 			internal CompatibilitySignalData[] CompatibilitySignals;
 			internal Texture[] TimetableDaytime;
 			internal Texture[] TimetableNighttime;

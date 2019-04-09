@@ -41,6 +41,13 @@ namespace OpenBve
 			/// <summary>The auto-generated timetable will be displayed only if no custom timetable is available</summary>
 			PreferCustom = 3
 		}
+
+		internal enum CompatibilitySignalType
+		{
+			Japanese = 0,
+			BritishRail = 1
+		}
+
 		internal enum GameMode
 		{
 			Arcade = 0,
@@ -179,6 +186,9 @@ namespace OpenBve
 			/// <summary>The list of enable Input Device Plugins</summary>
 			internal string[] EnableInputDevicePlugins;
 
+			/// <summary>The type of compatibility signals in use</summary>
+			internal CompatibilitySignalType compatibilitySignalType;
+
 			internal string CursorFileName;
 			internal bool Panel2ExtendedMode;
 			internal int Panel2ExtendedMinSize;
@@ -280,6 +290,7 @@ namespace OpenBve
 				this.Panel2ExtendedMinSize = 128;
 				this.CurrentXParser = XParsers.Original; //Set to Michelle's original X parser by default
 				this.CurrentObjParser = ObjParsers.Original; //Set to original Obj parser by default
+				this.compatibilitySignalType = CompatibilitySignalType.Japanese;
 			}
 		}
 		/// <summary>The current game options</summary>
@@ -542,7 +553,7 @@ namespace OpenBve
 												int.TryParse(Value, NumberStyles.Integer, Culture, out a);
 												Interface.CurrentOptions.ObjectOptimizationFullThreshold = a;
 											} break;
-										case "vertexCulling":
+										case "vertexculling":
 											{
 												Interface.CurrentOptions.ObjectOptimizationVertexCulling = string.Compare(Value, "false", StringComparison.OrdinalIgnoreCase) != 0;
 											} break;
@@ -585,7 +596,17 @@ namespace OpenBve
 										case "enablebvetshacks":
 											Interface.CurrentOptions.EnableBveTsHacks = string.Compare(Value, "false", StringComparison.OrdinalIgnoreCase) != 0;
 											break;
-
+										case "compatibilitysignals":
+											switch (Value.ToLowerInvariant())
+											{
+												case "japanese":
+													Interface.CurrentOptions.compatibilitySignalType = CompatibilitySignalType.Japanese;
+													break;
+												case "british":
+													Interface.CurrentOptions.compatibilitySignalType = CompatibilitySignalType.BritishRail;
+													break;
+											}
+											break;
 									} break;
 								case "controls":
 									switch (Key)
@@ -946,6 +967,16 @@ namespace OpenBve
 			}
 			Builder.AppendLine("acceleratedtimefactor = " + CurrentOptions.TimeAccelerationFactor);
 			Builder.AppendLine("enablebvetshacks = " + (CurrentOptions.EnableBveTsHacks ? "true" : "false"));
+			Builder.Append("CompatibilitySignals = ");
+			switch (CurrentOptions.compatibilitySignalType)
+			{
+				case CompatibilitySignalType.Japanese:
+					Builder.AppendLine(" japanese");
+					break;
+				case CompatibilitySignalType.BritishRail:
+					Builder.AppendLine("british");
+					break;
+			}
 			Builder.AppendLine();
 			Builder.AppendLine("[verbosity]");
 			Builder.AppendLine("showWarningMessages = " + (CurrentOptions.ShowWarningMessages ? "true" : "false"));
