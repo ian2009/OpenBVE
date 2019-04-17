@@ -46,7 +46,8 @@ namespace OpenBve
 		{
 			Japanese = 0,
 			BritishRail = 1,
-			DeutscheBundesbahn = 2
+			DeutscheBundesbahn = 2,
+			DeutscheBundesbahnNew = 3,
 		}
 
 		internal enum GameMode
@@ -609,6 +610,9 @@ namespace OpenBve
 												case "german":
 													Interface.CurrentOptions.compatibilitySignalType = CompatibilitySignalType.DeutscheBundesbahn;
 													break;
+												case "germannew":
+													Interface.CurrentOptions.compatibilitySignalType = CompatibilitySignalType.DeutscheBundesbahnNew;
+													break;
 											}
 											break;
 									} break;
@@ -982,6 +986,9 @@ namespace OpenBve
 					break;
 				case CompatibilitySignalType.DeutscheBundesbahn:
 					Builder.AppendLine("german");
+					break;
+				case CompatibilitySignalType.DeutscheBundesbahnNew:
+					Builder.AppendLine("germannew");
 					break;
 			}
 			Builder.AppendLine();

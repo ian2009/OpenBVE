@@ -382,7 +382,7 @@ namespace OpenBve {
 				comboBoxTimeTableDisplayMode.SelectedIndex = 1;
 			}
 			comboBoxCompatibilitySignalType.Items.Clear();
-			comboBoxCompatibilitySignalType.Items.AddRange(new object[] { "", "", "" });
+			comboBoxCompatibilitySignalType.Items.AddRange(new object[] { "", "", "", "" });
 			if ((int)Interface.CurrentOptions.compatibilitySignalType >= 0 & (int)Interface.CurrentOptions.compatibilitySignalType < comboBoxCompatibilitySignalType.Items.Count)
 			{
 				comboBoxCompatibilitySignalType.SelectedIndex = (int)Interface.CurrentOptions.compatibilitySignalType;
@@ -571,6 +571,7 @@ namespace OpenBve {
 			comboBoxCompatibilitySignalType.Items[0] = Translations.GetInterfaceString("options_other_signal_ja");
 			comboBoxCompatibilitySignalType.Items[1] = Translations.GetInterfaceString("options_other_signal_gb");
 			comboBoxCompatibilitySignalType.Items[2] = Translations.GetInterfaceString("options_other_signal_de");
+			comboBoxCompatibilitySignalType.Items[3] = Translations.GetInterfaceString("options_other_signal_de2");
 			//comboBox
 			//Options Page
 			buttonOptionsPrevious.Text = Translations.GetInterfaceString("options_page_previous");
