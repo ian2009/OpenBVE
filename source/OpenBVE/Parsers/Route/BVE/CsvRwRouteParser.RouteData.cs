@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using OpenBveApi.Math;
 using OpenBveApi.Textures;
 
 namespace OpenBve
@@ -89,16 +91,18 @@ namespace OpenBve
 								}
 							}
 						}
-						Blocks[i].Rails = new Rail[Blocks[i - 1].Rails.Length];
-						for (int j = 0; j < Blocks[i].Rails.Length; j++)
+						Blocks[i].Rails = new SortedDictionary<int, Rail>();
+						foreach (var Rail in Blocks[i - 1].Rails)
 						{
-							Blocks[i].Rails[j].RailStarted = Blocks[i - 1].Rails[j].RailStarted;
-							Blocks[i].Rails[j].RailStart.X = Blocks[i - 1].Rails[j].RailStart.X;
-							Blocks[i].Rails[j].RailStart.Y = Blocks[i - 1].Rails[j].RailStart.Y;
-							Blocks[i].Rails[j].RailStartRefreshed = false;
-							Blocks[i].Rails[j].RailEnded = false;
-							Blocks[i].Rails[j].RailEnd.X = Blocks[i - 1].Rails[j].RailStart.X;
-							Blocks[i].Rails[j].RailEnd.Y = Blocks[i - 1].Rails[j].RailStart.Y;
+							Rail currentRail = new Rail
+							{
+								RailStarted = Rail.Value.RailStarted,
+								RailStart = new Vector2(Rail.Value.RailStart),
+								RailStartRefreshed = false,
+								RailEnded = false,
+								RailEnd = new Vector2(Rail.Value.RailStart)
+							};
+							Blocks[i].Rails.Add(Rail.Key, currentRail);
 						}
 						if (!PreviewOnly)
 						{

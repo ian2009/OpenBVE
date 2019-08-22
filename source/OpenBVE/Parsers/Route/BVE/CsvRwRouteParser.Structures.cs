@@ -1,4 +1,5 @@
-﻿using OpenBve.RouteManager;
+﻿using System.Collections.Generic;
+using OpenBve.RouteManager;
 using OpenBve.SignalManager;
 using OpenBveApi.Math;
 using OpenBveApi.Routes;
@@ -199,7 +200,7 @@ namespace OpenBve
 			internal int[] Cycle;
 			internal RailCycle[] RailCycles;
 			internal double Height;
-			internal Rail[] Rails;
+			internal SortedDictionary<int, Rail> Rails;
 			internal int[] RailType;
 			internal WallDike[] RailWall;
 			internal WallDike[] RailDike;

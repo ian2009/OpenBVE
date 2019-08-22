@@ -63,8 +63,8 @@ namespace OpenBve {
 				Blocks = new Block[1]
 			};
 			Data.Blocks[0] = new Block();
-			Data.Blocks[0].Rails = new Rail[1];
-			Data.Blocks[0].Rails[0].RailStarted = true;
+			Data.Blocks[0].Rails = new SortedDictionary<int, Rail>();
+			Data.Blocks[0].Rails.Add(0, new Rail() { RailStarted = true });
 			Data.Blocks[0].RailType = new int[] { 0 };
 			Data.Blocks[0].Limits = new Limit[] { };
 			Data.Blocks[0].StopPositions = new Stop[] { };
@@ -2262,27 +2262,23 @@ namespace OpenBve {
 										}
 										if (string.Compare(Command, "track.railstart", StringComparison.OrdinalIgnoreCase) == 0)
 										{
-											if (idx < Data.Blocks[BlockIndex].Rails.Length && Data.Blocks[BlockIndex].Rails[idx].RailStarted)
+											if (Data.Blocks[BlockIndex].Rails.ContainsKey(idx) && Data.Blocks[BlockIndex].Rails[idx].RailStarted)
 											{
 												Interface.AddMessage(MessageType.Error, false, "RailIndex " + idx + " is required to reference a non-existing rail in " + Command + " at line " + Expressions[j].Line.ToString(Culture) + ", column " + Expressions[j].Column.ToString(Culture) + " in file " + Expressions[j].File);
 											}
 										}
-										if (Data.Blocks[BlockIndex].Rails.Length <= idx)
+										if (!Data.Blocks[BlockIndex].Rails.ContainsKey(idx))
 										{
-											Array.Resize<Rail>(ref Data.Blocks[BlockIndex].Rails, idx + 1);
-											int ol = Data.Blocks[BlockIndex].RailCycles.Length;
-											Array.Resize<RailCycle>(ref Data.Blocks[BlockIndex].RailCycles, idx + 1);
-											for (int rc = ol; rc < Data.Blocks[BlockIndex].RailCycles.Length; rc++)
-											{
-												Data.Blocks[BlockIndex].RailCycles[rc].RailCycleIndex = -1;
-											}
+											Data.Blocks[BlockIndex].Rails.Add(idx, new Rail());
 										}
-										if (Data.Blocks[BlockIndex].Rails[idx].RailStartRefreshed)
+
+										var currentRail = Data.Blocks[BlockIndex].Rails[idx];
+										if (currentRail.RailStartRefreshed)
 										{
-											Data.Blocks[BlockIndex].Rails[idx].RailEnded = true;
+											currentRail.RailEnded = true;
 										}
-										Data.Blocks[BlockIndex].Rails[idx].RailStarted = true;
-										Data.Blocks[BlockIndex].Rails[idx].RailStartRefreshed = true;
+										currentRail.RailStarted = true;
+										currentRail.RailStartRefreshed = true;
 										if (Arguments.Length >= 2)
 										{
 											if (Arguments[1].Length > 0)
@@ -2293,11 +2289,11 @@ namespace OpenBve {
 													Interface.AddMessage(MessageType.Error, false, "X is invalid in " + Command + " at line " + Expressions[j].Line.ToString(Culture) + ", column " + Expressions[j].Column.ToString(Culture) + " in file " + Expressions[j].File);
 													x = 0.0;
 												}
-												Data.Blocks[BlockIndex].Rails[idx].RailStart.X = x;
+												currentRail.RailStart.X = x;
 											}
 											if (!Data.Blocks[BlockIndex].Rails[idx].RailEnded)
 											{
-												Data.Blocks[BlockIndex].Rails[idx].RailEnd.X = Data.Blocks[BlockIndex].Rails[idx].RailStart.X;
+												currentRail.RailEnd.X = Data.Blocks[BlockIndex].Rails[idx].RailStart.X;
 											}
 										}
 										if (Arguments.Length >= 3)
@@ -2310,16 +2306,20 @@ namespace OpenBve {
 													Interface.AddMessage(MessageType.Error, false, "Y is invalid in " + Command + " at line " + Expressions[j].Line.ToString(Culture) + ", column " + Expressions[j].Column.ToString(Culture) + " in file " + Expressions[j].File);
 													y = 0.0;
 												}
-												Data.Blocks[BlockIndex].Rails[idx].RailStart.Y = y;
+												currentRail.RailStart.Y = y;
 											}
-											if (!Data.Blocks[BlockIndex].Rails[idx].RailEnded)
+											if (!currentRail.RailEnded)
 											{
-												Data.Blocks[BlockIndex].Rails[idx].RailEnd.Y = Data.Blocks[BlockIndex].Rails[idx].RailStart.Y;
+												currentRail.RailEnd.Y = currentRail.RailStart.Y;
 											}
 										}
 										if (Data.Blocks[BlockIndex].RailType.Length <= idx)
 										{
-											Array.Resize<int>(ref Data.Blocks[BlockIndex].RailType, idx + 1);
+											Array.Resize(ref Data.Blocks[BlockIndex].RailType, idx + 1);
+										}
+										if (Data.Blocks[BlockIndex].RailCycles.Length <= idx)
+										{
+											Array.Resize(ref Data.Blocks[BlockIndex].RailCycles, idx + 1);
 										}
 										if (Arguments.Length >= 4 && Arguments[3].Length != 0)
 										{
@@ -2366,7 +2366,8 @@ namespace OpenBve {
 										{
 											cant *= 0.001;
 										}
-										Data.Blocks[BlockIndex].Rails[idx].CurveCant = cant;
+										currentRail.CurveCant = cant;
+										Data.Blocks[BlockIndex].Rails[idx] = currentRail;
 									}
 									break;
 								case "track.railend":
@@ -2379,18 +2380,19 @@ namespace OpenBve {
 												Interface.AddMessage(MessageType.Error, false, "RailIndex " + idx + " is invalid in " + Command + " at line " + Expressions[j].Line.ToString(Culture) + ", column " + Expressions[j].Column.ToString(Culture) + " in file " + Expressions[j].File);
 												break;
 											}
-											if (idx < 0 || idx >= Data.Blocks[BlockIndex].Rails.Length || !Data.Blocks[BlockIndex].Rails[idx].RailStarted)
+											if (!Data.Blocks[BlockIndex].Rails.ContainsKey(idx) || !Data.Blocks[BlockIndex].Rails[idx].RailStarted)
 											{
 												Interface.AddMessage(MessageType.Error, false, "RailIndex " + idx + " references a non-existing rail in " + Command + " at line " + Expressions[j].Line.ToString(Culture) + ", column " + Expressions[j].Column.ToString(Culture) + " in file " + Expressions[j].File);
 												break;
 											}
-											if (Data.Blocks[BlockIndex].RailType.Length <= idx)
+											if (!Data.Blocks[BlockIndex].Rails.ContainsKey(idx))
 											{
-												Array.Resize<Rail>(ref Data.Blocks[BlockIndex].Rails, idx + 1);
+												Data.Blocks[BlockIndex].Rails.Add(idx, new Rail());
 											}
-											Data.Blocks[BlockIndex].Rails[idx].RailStarted = false;
-											Data.Blocks[BlockIndex].Rails[idx].RailStartRefreshed = false;
-											Data.Blocks[BlockIndex].Rails[idx].RailEnded = true;
+											var currentRail = Data.Blocks[BlockIndex].Rails[idx];
+											currentRail.RailStarted = false;
+											currentRail.RailStartRefreshed = false;
+											currentRail.RailEnded = true;
 											if (Arguments.Length >= 2 && Arguments[1].Length > 0)
 											{
 												double x;
@@ -2399,7 +2401,7 @@ namespace OpenBve {
 													Interface.AddMessage(MessageType.Error, false, "X is invalid in " + Command + " at line " + Expressions[j].Line.ToString(Culture) + ", column " + Expressions[j].Column.ToString(Culture) + " in file " + Expressions[j].File);
 													x = 0.0;
 												}
-												Data.Blocks[BlockIndex].Rails[idx].RailEnd.X = x;
+												currentRail.RailEnd.X = x;
 											}
 											if (Arguments.Length >= 3 && Arguments[2].Length > 0)
 											{
@@ -2409,8 +2411,10 @@ namespace OpenBve {
 													Interface.AddMessage(MessageType.Error, false, "Y is invalid in " + Command + " at line " + Expressions[j].Line.ToString(Culture) + ", column " + Expressions[j].Column.ToString(Culture) + " in file " + Expressions[j].File);
 													y = 0.0;
 												}
-												Data.Blocks[BlockIndex].Rails[idx].RailEnd.Y = y;
+												currentRail.RailEnd.Y = y;
 											}
+
+											Data.Blocks[BlockIndex].Rails[idx] = currentRail;
 										}
 									} break;
 								case "track.railtype":
@@ -2429,7 +2433,7 @@ namespace OpenBve {
 											if (idx < 0) {
 												Interface.AddMessage(MessageType.Error, false, "RailIndex is expected to be non-negative in " + Command + " at line " + Expressions[j].Line.ToString(Culture) + ", column " + Expressions[j].Column.ToString(Culture) + " in file " + Expressions[j].File);
 											} else {
-												if (idx >= Data.Blocks[BlockIndex].Rails.Length || !Data.Blocks[BlockIndex].Rails[idx].RailStarted) {
+												if (!Data.Blocks[BlockIndex].Rails.ContainsKey(idx) || !Data.Blocks[BlockIndex].Rails[idx].RailStarted) {
 													Interface.AddMessage(MessageType.Warning, false, "RailIndex " + idx + " could be out of range in " + Command + " at line " + Expressions[j].Line.ToString(Culture) + ", column " + Expressions[j].Column.ToString(Culture) + " in file " + Expressions[j].File);
 												}
 												if (sttype < 0) {
@@ -3638,10 +3642,10 @@ namespace OpenBve {
 											} else if (idx2 < 0 & idx2 != Form.SecondaryRailStub & idx2 != Form.SecondaryRailL & idx2 != Form.SecondaryRailR) {
 												Interface.AddMessage(MessageType.Error, false, "RailIndex2 is expected to be greater or equal to -2 in Track.Form at line " + Expressions[j].Line.ToString(Culture) + ", column " + Expressions[j].Column.ToString(Culture) + " in file " + Expressions[j].File);
 											} else {
-												if (idx1 >= Data.Blocks[BlockIndex].Rails.Length || !Data.Blocks[BlockIndex].Rails[idx1].RailStarted) {
+												if (!Data.Blocks[BlockIndex].Rails.ContainsKey(idx1) || !Data.Blocks[BlockIndex].Rails[idx1].RailStarted) {
 													Interface.AddMessage(MessageType.Warning, false, "RailIndex1 could be out of range in Track.Form at line " + Expressions[j].Line.ToString(Culture) + ", column " + Expressions[j].Column.ToString(Culture) + " in file " + Expressions[j].File);
 												}
-												if (idx2 != Form.SecondaryRailStub & idx2 != Form.SecondaryRailL & idx2 != Form.SecondaryRailR && (idx2 >= Data.Blocks[BlockIndex].Rails.Length || !Data.Blocks[BlockIndex].Rails[idx2].RailStarted)) {
+												if (idx2 != Form.SecondaryRailStub & idx2 != Form.SecondaryRailL & idx2 != Form.SecondaryRailR && (!Data.Blocks[BlockIndex].Rails.ContainsKey(idx2) || !Data.Blocks[BlockIndex].Rails[idx2].RailStarted)) {
 													Interface.AddMessage(MessageType.Warning, false, "RailIndex2 could be out of range in Track.Form at line " + Expressions[j].Line.ToString(Culture) + ", column " + Expressions[j].Column.ToString(Culture) + " in file " + Expressions[j].File);
 												}
 												int roof = 0, pf = 0;
@@ -3680,7 +3684,7 @@ namespace OpenBve {
 											if (idx < 0) {
 												Interface.AddMessage(MessageType.Error, false, "RailIndex is expected to be non-negative in Track.Pole at line " + Expressions[j].Line.ToString(Culture) + ", column " + Expressions[j].Column.ToString(Culture) + " in file " + Expressions[j].File);
 											} else {
-												if (idx >= Data.Blocks[BlockIndex].Rails.Length || !Data.Blocks[BlockIndex].Rails[idx].RailStarted) {
+												if (!Data.Blocks[BlockIndex].Rails.ContainsKey(idx) || !Data.Blocks[BlockIndex].Rails[idx].RailStarted) {
 													Interface.AddMessage(MessageType.Warning, false, "RailIndex " + idx +" could be out of range in Track.Pole at line " + Expressions[j].Line.ToString(Culture) + ", column " + Expressions[j].Column.ToString(Culture) + " in file " + Expressions[j].File);
 												}
 												if (idx >= Data.Blocks[BlockIndex].RailPole.Length) {
@@ -3743,7 +3747,7 @@ namespace OpenBve {
 											if (idx < 0 | idx >= Data.Blocks[BlockIndex].RailPole.Length) {
 												Interface.AddMessage(MessageType.Error, false, "RailIndex " + idx + " does not reference an existing pole in Track.PoleEnd at line " + Expressions[j].Line.ToString(Culture) + ", column " + Expressions[j].Column.ToString(Culture) + " in file " + Expressions[j].File);
 											} else {
-												if (idx >= Data.Blocks[BlockIndex].Rails.Length || (!Data.Blocks[BlockIndex].Rails[idx].RailStarted & !Data.Blocks[BlockIndex].Rails[idx].RailEnded)) {
+												if (!Data.Blocks[BlockIndex].Rails.ContainsKey(idx) || (!Data.Blocks[BlockIndex].Rails[idx].RailStarted & !Data.Blocks[BlockIndex].Rails[idx].RailEnded)) {
 													Interface.AddMessage(MessageType.Warning, false, "RailIndex " + idx + " could be out of range in Track.PoleEnd at line " + Expressions[j].Line.ToString(Culture) + ", column " + Expressions[j].Column.ToString(Culture) + " in file " + Expressions[j].File);
 												}
 												Data.Blocks[BlockIndex].RailPole[idx].Exists = false;
@@ -3826,7 +3830,7 @@ namespace OpenBve {
 															dir = -1;
 														}
 													}
-													if (idx >= Data.Blocks[BlockIndex].Rails.Length || !Data.Blocks[BlockIndex].Rails[idx].RailStarted) {
+													if (!Data.Blocks[BlockIndex].Rails.ContainsKey(idx) || !Data.Blocks[BlockIndex].Rails[idx].RailStarted) {
 														Interface.AddMessage(MessageType.Warning, false, "RailIndex " + idx + " could be out of range in Track.Wall at line " + Expressions[j].Line.ToString(Culture) + ", column " + Expressions[j].Column.ToString(Culture) + " in file " + Expressions[j].File);
 													}
 													if (idx >= Data.Blocks[BlockIndex].RailWall.Length) {
@@ -3850,7 +3854,7 @@ namespace OpenBve {
 											if (idx < 0 | idx >= Data.Blocks[BlockIndex].RailWall.Length) {
 												Interface.AddMessage(MessageType.Error, false, "RailIndex " + idx + " does not reference an existing wall in Track.WallEnd at line " + Expressions[j].Line.ToString(Culture) + ", column " + Expressions[j].Column.ToString(Culture) + " in file " + Expressions[j].File);
 											} else {
-												if (idx >= Data.Blocks[BlockIndex].Rails.Length || (!Data.Blocks[BlockIndex].Rails[idx].RailStarted & !Data.Blocks[BlockIndex].Rails[idx].RailEnded)) {
+												if (!Data.Blocks[BlockIndex].Rails.ContainsKey(idx) || (!Data.Blocks[BlockIndex].Rails[idx].RailStarted & !Data.Blocks[BlockIndex].Rails[idx].RailEnded)) {
 													Interface.AddMessage(MessageType.Warning, false, "RailIndex " + idx + " could be out of range in Track.WallEnd at line " + Expressions[j].Line.ToString(Culture) + ", column " + Expressions[j].Column.ToString(Culture) + " in file " + Expressions[j].File);
 												}
 												Data.Blocks[BlockIndex].RailWall[idx].Exists = false;
@@ -3934,7 +3938,7 @@ namespace OpenBve {
 															dir = -1;
 														}
 													}
-													if (idx >= Data.Blocks[BlockIndex].Rails.Length || !Data.Blocks[BlockIndex].Rails[idx].RailStarted) {
+													if (!Data.Blocks[BlockIndex].Rails.ContainsKey(idx) || !Data.Blocks[BlockIndex].Rails[idx].RailStarted) {
 														Interface.AddMessage(MessageType.Warning, false, "RailIndex " + idx + " could be out of range in Track.Dike at line " + Expressions[j].Line.ToString(Culture) + ", column " + Expressions[j].Column.ToString(Culture) + " in file " + Expressions[j].File);
 													}
 													if (idx >= Data.Blocks[BlockIndex].RailDike.Length) {
@@ -3958,7 +3962,7 @@ namespace OpenBve {
 											if (idx < 0 | idx >= Data.Blocks[BlockIndex].RailDike.Length) {
 												Interface.AddMessage(MessageType.Error, false, "RailIndex " + idx +" does not reference an existing dike in Track.DikeEnd at line " + Expressions[j].Line.ToString(Culture) + ", column " + Expressions[j].Column.ToString(Culture) + " in file " + Expressions[j].File);
 											} else {
-												if (idx >= Data.Blocks[BlockIndex].Rails.Length || (!Data.Blocks[BlockIndex].Rails[idx].RailStarted & !Data.Blocks[BlockIndex].Rails[idx].RailEnded)) {
+												if (!Data.Blocks[BlockIndex].Rails.ContainsKey(idx) || (!Data.Blocks[BlockIndex].Rails[idx].RailStarted & !Data.Blocks[BlockIndex].Rails[idx].RailEnded)) {
 													Interface.AddMessage(MessageType.Warning, false, "RailIndex " + idx + " could be out of range in Track.DikeEnd at line " + Expressions[j].Line.ToString(Culture) + ", column " + Expressions[j].Column.ToString(Culture) + " in file " + Expressions[j].File);
 												}
 												Data.Blocks[BlockIndex].RailDike[idx].Exists = false;
@@ -4128,10 +4132,10 @@ namespace OpenBve {
 												} else if (idx1 == idx2) {
 													Interface.AddMessage(MessageType.Error, false, "RailIndex1 is expected to be unequal to Index2 in Track.Crack at line " + Expressions[j].Line.ToString(Culture) + ", column " + Expressions[j].Column.ToString(Culture) + " in file " + Expressions[j].File);
 												} else {
-													if (idx1 >= Data.Blocks[BlockIndex].Rails.Length || !Data.Blocks[BlockIndex].Rails[idx1].RailStarted) {
+													if (!Data.Blocks[BlockIndex].Rails.ContainsKey(idx1) || !Data.Blocks[BlockIndex].Rails[idx1].RailStarted) {
 														Interface.AddMessage(MessageType.Warning, false, "RailIndex1 " + idx1 + " could be out of range in Track.Crack at line " + Expressions[j].Line.ToString(Culture) + ", column " + Expressions[j].Column.ToString(Culture) + " in file " + Expressions[j].File);
 													}
-													if (idx2 >= Data.Blocks[BlockIndex].Rails.Length || !Data.Blocks[BlockIndex].Rails[idx2].RailStarted) {
+													if (!Data.Blocks[BlockIndex].Rails.ContainsKey(idx2) || !Data.Blocks[BlockIndex].Rails[idx2].RailStarted) {
 														Interface.AddMessage(MessageType.Warning, false, "RailIndex2 " + idx2 + " could be out of range in Track.Crack at line " + Expressions[j].Line.ToString(Culture) + ", column " + Expressions[j].Column.ToString(Culture) + " in file " + Expressions[j].File);
 													}
 													int n = Data.Blocks[BlockIndex].Cracks.Length;
@@ -4171,7 +4175,7 @@ namespace OpenBve {
 											} else if (sttype < 0) {
 												Interface.AddMessage(MessageType.Error, false, "FreeObjStructureIndex is expected to be non-negative in Track.FreeObj at line " + Expressions[j].Line.ToString(Culture) + ", column " + Expressions[j].Column.ToString(Culture) + " in file " + Expressions[j].File);
 											} else {
-												if (idx >= 0 && (idx >= Data.Blocks[BlockIndex].Rails.Length || !Data.Blocks[BlockIndex].Rails[idx].RailStarted)) {
+												if (idx >= 0 && (!Data.Blocks[BlockIndex].Rails.ContainsKey(idx) || !Data.Blocks[BlockIndex].Rails[idx].RailStarted)) {
 													Interface.AddMessage(MessageType.Warning, false, "RailIndex " + idx + " could be out of range in Track.FreeObj at line " + Expressions[j].Line.ToString(Culture) + ", column " + Expressions[j].Column.ToString(Culture) + " in file " + Expressions[j].File);
 												}
 												if (!Data.Structure.FreeObjects.ContainsKey(sttype)) {
@@ -4429,7 +4433,7 @@ namespace OpenBve {
 												Interface.AddMessage(MessageType.Error, false, "RailIndex is expected to be non-negative in " + Command + " at line " + Expressions[j].Line.ToString(Culture) + ", column " + Expressions[j].Column.ToString(Culture) + " in file " + Expressions[j].File);
 												idx = 0;
 											}
-											if (idx >= 0 && (idx >= Data.Blocks[BlockIndex].Rails.Length || !Data.Blocks[BlockIndex].Rails[idx].RailStarted)) {
+											if (idx >= 0 && (!Data.Blocks[BlockIndex].Rails.ContainsKey(idx) || !Data.Blocks[BlockIndex].Rails[idx].RailStarted)) {
 												Interface.AddMessage(MessageType.Error, false, "RailIndex " + idx + " references a non-existing rail in " + Command + " at line " + Expressions[j].Line.ToString(Culture) + ", column " + Expressions[j].Column.ToString(Culture) + " in file " + Expressions[j].File);
 											}
 											double x = 0.0, y = 0.0;
