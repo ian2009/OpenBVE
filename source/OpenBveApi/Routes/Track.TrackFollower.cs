@@ -1,4 +1,5 @@
-﻿using OpenBveApi.Math;
+﻿using System.Collections.Generic;
+using OpenBveApi.Math;
 using OpenBveApi.Trains;
 
 namespace OpenBveApi.Routes
@@ -39,7 +40,7 @@ namespace OpenBveApi.Routes
 		/// <summary>The track index the follower is currently following</summary>
 		public int TrackIndex;
 		/// <summary>Stores a reference to the CurrentRoute.Tracks array</summary>
-		private readonly Track[] Tracks;
+		private readonly SortedDictionary<int, Track> Tracks;
 
 		public TrackFollower Clone()
 		{
@@ -55,7 +56,7 @@ namespace OpenBveApi.Routes
 		}
 
 		/// <summary>Creates a new TrackFollower</summary>
-		public TrackFollower(Track[] tracks, AbstractTrain train = null, AbstractCar car = null)
+		public TrackFollower(SortedDictionary<int, Track> tracks, AbstractTrain train = null, AbstractCar car = null)
 		{
 			Tracks = tracks;
 			Train = train;
@@ -107,7 +108,7 @@ namespace OpenBveApi.Routes
 		/// <param name="AddTrackInaccuracy">Whether to add track innacuracy</param>
 		public void UpdateAbsolute(double NewTrackPosition, bool UpdateWorldCoordinates, bool AddTrackInaccuracy)
 		{
-			if (TrackIndex >= Tracks.Length || Tracks[TrackIndex].Elements.Length == 0) return;
+			if (!Tracks.ContainsKey(TrackIndex) || Tracks[TrackIndex].Elements.Length == 0) return;
 			int i = LastTrackElement;
 			while (i >= 0 && NewTrackPosition < Tracks[TrackIndex].Elements[i].StartingTrackPosition)
 			{

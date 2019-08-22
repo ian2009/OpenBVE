@@ -152,24 +152,8 @@ namespace OpenBve
 			int PreviousFogEvent = -1;
 			Fog PreviousFog = new Fog(CurrentRoute.NoFogStart, CurrentRoute.NoFogEnd, Color24.Grey, -Data.BlockInterval);
 			Fog CurrentFog = new Fog(CurrentRoute.NoFogStart, CurrentRoute.NoFogEnd, Color24.Grey, 0.0);
-			for (int i = Data.FirstUsedBlock; i < Data.Blocks.Length; i++)
-			{
-				if (Data.Blocks[i].Rails.Count > CurrentRoute.Tracks.Length)
-				{
-					Array.Resize(ref CurrentRoute.Tracks, Data.Blocks[i].Rails.Count);
-				}
-			}
-			for (int i = 0; i < CurrentRoute.Tracks.Length; i++)
-			{
-				if (CurrentRoute.Tracks[i] == null)
-				{
-					CurrentRoute.Tracks[i] = new Track();
-				}
-				if (CurrentRoute.Tracks[i].Elements == null)
-				{
-					CurrentRoute.Tracks[i].Elements = new TrackElement[256];
-				}
-			}
+			CurrentRoute.Tracks.Add(0, new Track { Elements = new TrackElement[256] });
+
 			// process blocks
 			double progressFactor = Data.Blocks.Length - Data.FirstUsedBlock == 0 ? 0.5 : 0.5 / (double)(Data.Blocks.Length - Data.FirstUsedBlock);
 			for (int i = Data.FirstUsedBlock; i < Data.Blocks.Length; i++)
@@ -201,8 +185,9 @@ namespace OpenBve
 				}
 				TrackElement WorldTrackElement = Data.Blocks[i].CurrentTrackState;
 				int n = CurrentTrackLength;
-				for (int j = 0; j < CurrentRoute.Tracks.Length; j++)
+				foreach (var Track in CurrentRoute.Tracks)
 				{
+					int j = Track.Key;
 					if (n >= CurrentRoute.Tracks[j].Elements.Length)
 					{
 						Array.Resize(ref CurrentRoute.Tracks[j].Elements, CurrentRoute.Tracks[j].Elements.Length << 1);
@@ -217,8 +202,9 @@ namespace OpenBve
 				CurrentRoute.Tracks[0].Elements[n].StartingTrackPosition = StartingDistance;
 				CurrentRoute.Tracks[0].Elements[n].AdhesionMultiplier = Data.Blocks[i].AdhesionMultiplier;
 				CurrentRoute.Tracks[0].Elements[n].CsvRwAccuracyLevel = Data.Blocks[i].Accuracy;
-				for (int j = 0; j < CurrentRoute.Tracks.Length; j++)
+				foreach (var Track in CurrentRoute.Tracks)
 				{
+					int j = Track.Key;
 					CurrentRoute.Tracks[j].Elements[n].Events = new GeneralEvent[] { };
 				}
 				// background
@@ -259,8 +245,9 @@ namespace OpenBve
 						/*
 						 * Legacy brightness: This applies equally to all tracks in a block
 						 */
-						for (int t = 0; t < CurrentRoute.Tracks.Length; t++)
+						foreach (var Track in CurrentRoute.Tracks)
 						{
+							int t = Track.Key;
 							int m = CurrentRoute.Tracks[t].Elements[n].Events.Length;
 							Array.Resize(ref CurrentRoute.Tracks[t].Elements[n].Events, m + 1);
 							double d = Data.Blocks[i].BrightnessChanges[j].TrackPosition - StartingDistance;
@@ -624,10 +611,22 @@ namespace OpenBve
 				// rail-aligned objects
 				if (!PreviewOnly)
 				{
-					int trackIndex = 0;
+					int previousKey = 0;
 					foreach (var kvp in Data.Blocks[i].Rails)
 					{
+						
 						int j = kvp.Key;
+						if (!CurrentRoute.Tracks.ContainsKey(j))
+						{
+							CurrentRoute.Tracks.Add(j, new Track());
+							Array.Resize(ref CurrentRoute.Tracks[j].Elements, CurrentRoute.Tracks[previousKey].Elements.Length);
+							for (int ti = 0; ti < CurrentRoute.Tracks[j].Elements.Length; ti++)
+							{
+								CurrentRoute.Tracks[j].Elements[ti].Events = new GeneralEvent[] { };
+							}
+						}
+
+						previousKey = j;
 						if (j > 0 && !Data.Blocks[i].Rails[j].RailStarted) continue;
 						// rail
 						Vector3 pos;
@@ -729,13 +728,13 @@ namespace OpenBve
 								RailTransformation = new Transformation(TrackTransformation, 0.0, 0.0, 0.0);
 							}
 
-							CurrentRoute.Tracks[trackIndex].Elements[n].StartingTrackPosition = StartingDistance;
-							CurrentRoute.Tracks[trackIndex].Elements[n].WorldPosition = pos;
-							CurrentRoute.Tracks[trackIndex].Elements[n].WorldDirection = RailTransformation.Z;
-							CurrentRoute.Tracks[trackIndex].Elements[n].WorldSide = RailTransformation.X;
-							CurrentRoute.Tracks[trackIndex].Elements[n].WorldUp = RailTransformation.Y;
-							CurrentRoute.Tracks[trackIndex].Elements[n].CurveCant = Data.Blocks[i].Rails[j].CurveCant;
-							CurrentRoute.Tracks[trackIndex].Elements[n].AdhesionMultiplier = Data.Blocks[i].AdhesionMultiplier;
+							CurrentRoute.Tracks[j].Elements[n].StartingTrackPosition = StartingDistance;
+							CurrentRoute.Tracks[j].Elements[n].WorldPosition = pos;
+							CurrentRoute.Tracks[j].Elements[n].WorldDirection = RailTransformation.Z;
+							CurrentRoute.Tracks[j].Elements[n].WorldSide = RailTransformation.X;
+							CurrentRoute.Tracks[j].Elements[n].WorldUp = RailTransformation.Y;
+							CurrentRoute.Tracks[j].Elements[n].CurveCant = Data.Blocks[i].Rails[j].CurveCant;
+							CurrentRoute.Tracks[j].Elements[n].AdhesionMultiplier = Data.Blocks[i].AdhesionMultiplier;
 						}
 						if (Data.Structure.RailObjects.ContainsKey(Data.Blocks[i].RailType[j]))
 						{
@@ -1568,8 +1567,6 @@ namespace OpenBve
 								}
 							}
 						}
-
-						trackIndex++;
 					}
 				}
 				// finalize block
@@ -1654,8 +1651,9 @@ namespace OpenBve
 				Array.Resize(ref CurrentRoute.PointsOfInterest, n);
 			}
 			// convert block-based cant into point-based cant
-			for (int i = 0; i < CurrentRoute.Tracks.Length; i++)
+			foreach (var Track in CurrentRoute.Tracks)
 			{
+				int i = Track.Key;
 				for (int j = CurrentTrackLength - 1; j >= 1; j--)
 				{
 					if (CurrentRoute.Tracks[i].Elements[j].CurveCant == 0.0)
@@ -1679,8 +1677,9 @@ namespace OpenBve
 				}
 			}
 			// finalize
-			for (int i = 0; i < CurrentRoute.Tracks.Length; i++)
+			foreach (var Track in CurrentRoute.Tracks)
 			{
+				int i = Track.Key;
 				Array.Resize(ref CurrentRoute.Tracks[i].Elements, CurrentTrackLength);
 			}
 			for (int i = 0; i < CurrentRoute.Stations.Length; i++)
@@ -1823,8 +1822,9 @@ namespace OpenBve
 		// compute cant tangents
 		private static void ComputeCantTangents()
 		{
-			for (int i = 0; i < CurrentRoute.Tracks.Length; i++)
+			foreach (var Track in CurrentRoute.Tracks)
 			{
+				int i = Track.Key;
 				if (CurrentRoute.Tracks[i].Elements.Length == 1)
 				{
 					CurrentRoute.Tracks[i].Elements[0].CurveCantTangent = 0.0;

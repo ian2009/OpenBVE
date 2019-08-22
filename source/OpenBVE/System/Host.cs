@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using LibRender;
 using OpenBve.RouteManager;
 using OpenBveApi.Hosts;
@@ -345,7 +346,7 @@ namespace OpenBve {
 			}
 		}
 
-		public override Track[] Tracks
+		public override SortedDictionary<int, Track> Tracks
 		{
 			get
 			{

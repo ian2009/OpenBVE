@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using OpenBveApi.Colors;
 using OpenBveApi.Textures;
 using OpenBveApi.Trains;
@@ -44,12 +45,8 @@ namespace OpenBve {
         /// <summary>Call this function to reset the game</summary>
         /// <param name="ResetLogs">Whether the logs should be reset</param>
 		internal static void Reset(bool ResetLogs) {
-			// track manager
-			for (int i = 0; i < CurrentRoute.Tracks.Length; i++)
-			{
-				CurrentRoute.Tracks[i] = new Track();
-			}
-			// train manager
+	        CurrentRoute.Tracks = new SortedDictionary<int, Track>();
+	        // train manager
 			TrainManager.Trains = new TrainManager.Train[] { };
 			// game
 			Interface.ClearMessages();

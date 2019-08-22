@@ -1,4 +1,5 @@
-﻿using LibRender;
+﻿using System.Collections.Generic;
+using LibRender;
 using OpenBve.BackgroundManager;
 using OpenBve.SignalManager;
 using OpenBveApi.Colors;
@@ -12,7 +13,7 @@ namespace OpenBve.RouteManager
 	public static class CurrentRoute
 	{
 		/// <summary>The list of tracks available in the simulation.</summary>
-		public static Track[] Tracks = { new Track() };
+		public static SortedDictionary<int, Track> Tracks = new SortedDictionary<int, Track>();
 		/// <summary>Holds a reference to the base TrainManager.Trains array</summary>
 		public static AbstractTrain[] Trains;
 		/// <summary>Holds all signal sections within the current route</summary>

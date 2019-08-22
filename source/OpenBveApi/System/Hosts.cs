@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.Collections.Generic;
+using System.Drawing;
 using OpenBveApi.Interface;
 using OpenBveApi.Math;
 using OpenBveApi.Objects;
@@ -305,7 +306,7 @@ namespace OpenBveApi.Hosts {
 		}
 
 		/// <summary>Gets or sets the tracks array within the host application</summary>
-		public virtual Track[] Tracks
+		public virtual SortedDictionary<int, Track> Tracks
 		{
 			get
 			{

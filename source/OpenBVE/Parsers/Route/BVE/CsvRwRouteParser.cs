@@ -605,8 +605,9 @@ namespace OpenBve {
 										} else if (a <= 0.0) {
 											Interface.AddMessage(MessageType.Error, false, "ValueInMillimeters is expected to be positive in " + Command + " at line " + Expressions[j].Line.ToString(Culture) + ", column " + Expressions[j].Column.ToString(Culture) + " in file " + Expressions[j].File);
 										} else {
-											for (int t = 0; t < CurrentRoute.Tracks.Length; t++)
+											foreach (var Track in CurrentRoute.Tracks)
 											{
+												int t = Track.Key;
 												CurrentRoute.Tracks[t].RailGauge = 0.001 * a;
 											}
 										}
