@@ -379,6 +379,16 @@ namespace OpenBve
 								}
 								if (q)
 								{
+									if (!CurrentRoute.Tracks.ContainsKey(j))
+									{
+										CurrentRoute.Tracks.Add(j, new Track());
+										CurrentRoute.Tracks[j].Elements = new TrackElement[] { };
+										Array.Resize(ref CurrentRoute.Tracks[j].Elements, CurrentRoute.Tracks[0].Elements.Length);
+										for (int t = 0; t < CurrentRoute.Tracks[j].Elements.Length; t++)
+										{
+											CurrentRoute.Tracks[j].Elements[t].Events = new GeneralEvent[] { };
+										}
+									}
 									int m = CurrentRoute.Tracks[j].Elements[n].Events.Length;
 									Array.Resize(ref CurrentRoute.Tracks[j].Elements[n].Events, m + 1);
 									CurrentRoute.Tracks[j].Elements[n].Events[m] = new TrackManager.PointSoundEvent();
