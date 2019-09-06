@@ -7,7 +7,6 @@
 
 using OpenBve.BrakeSystems;
 using OpenBve.TrainManagement;
-using OpenBveApi.Math;
 using OpenBveApi.Routes;
 using OpenBveApi.Trains;
 
@@ -21,22 +20,9 @@ namespace OpenBve {
 		internal struct Axle {
 			internal TrackFollower Follower;
 		}
-		internal enum AirBrakeHandleState {
-			Invalid = -1,
-			Release = 0,
-			Lap = 1,
-			Service = 2,
-		}
-		internal struct AirBrakeHandle {
-			internal AirBrakeHandleState Driver;
-			internal AirBrakeHandleState Safety;
-			internal AirBrakeHandleState Actual;
-			internal AirBrakeHandleState DelayedValue;
-			internal double DelayedTime;
-		}
-		internal enum AirBrakeType { Main, Auxillary }
+
 		internal struct CarAirBrake {
-			internal AirBrakeType Type;
+			internal BrakeType Type;
 			internal bool AirCompressorEnabled;
 			internal double AirCompressorMinimumPressure;
 			internal double AirCompressorMaximumPressure;
@@ -159,12 +145,6 @@ namespace OpenBve {
 			internal int Actual;
 			internal HandleChange[] DelayedChanges;
 		}
-		internal struct EmergencyHandle {
-			internal bool Driver;
-			internal bool Safety;
-			internal bool Actual;
-			internal double ApplicationTime;
-		}
 		internal struct ReverserHandle {
 			internal int Driver;
 			internal int Actual;
@@ -232,10 +212,10 @@ namespace OpenBve {
 			Single = 1,
 			Loop = 2
 		}
-		internal struct TrainAirBrake {
-			internal AirBrakeHandle Handle;
+		internal class TrainAirBrake {
+			internal AirBrakeHandle Handle = new AirBrakeHandle();
 		}
-		internal struct TrainSpecs {
+		internal class TrainSpecs {
 			internal double TotalMass;
 			internal ReverserHandle CurrentReverser;
 			internal double CurrentAverageAcceleration;
@@ -250,13 +230,13 @@ namespace OpenBve {
 			internal PowerHandle CurrentPowerNotch;
 			internal int MaximumBrakeNotch;
 			internal BrakeHandle CurrentBrakeNotch;
-			internal EmergencyHandle CurrentEmergencyBrake;
+			internal EmergencyHandle CurrentEmergencyBrake = new EmergencyHandle();
 			internal bool HasHoldBrake;
 			internal HoldBrakeHandle CurrentHoldBrake;
 			internal bool HasConstSpeed;
 			internal bool CurrentConstSpeed;
 			internal TrainSafety Safety;
-			internal TrainAirBrake AirBrake;
+			internal TrainAirBrake AirBrake = new TrainAirBrake();
 			internal double DelayPowerStart;
 			internal double DelayPowerStop;
 			internal double DelayBrakeStart;
@@ -268,7 +248,7 @@ namespace OpenBve {
 		// train
 		internal class Train : AbstractTrain {
 			internal Car[] Cars;
-			internal TrainSpecs Specs;
+			internal TrainSpecs Specs = new TrainSpecs();
 			public override double FrontCarTrackPosition()
 			{
 				return Cars[0].FrontAxle.Follower.TrackPosition - Cars[0].FrontAxlePosition + 0.5 * Cars[0].Length;

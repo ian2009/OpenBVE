@@ -63,6 +63,7 @@
     <Compile Include="Handles\AbstractHandle.cs" />
     <Compile Include="Handles\AbstractHandle.Notched.cs" />
     <Compile Include="Handles\HandleChange.cs" />
+    <Compile Include="Handles\Handles.AirBrake.cs" />
     <Compile Include="Handles\Handles.AirBrake.States.cs" />
     <Compile Include="Handles\Handles.Eb.Behaviour.cs" />
     <Compile Include="Handles\Handles.EmergencyBrake.cs" />

@@ -323,7 +323,7 @@ namespace OpenBve
 					if (checkBoxAirBrake.Checked)
 					{
 						TrainManager.Trains[0].Cars[0].Specs.BrakeType = BrakeSystemType.AutomaticAirBrake;
-						TrainManager.Trains[0].Specs.AirBrake.Handle.Driver = (TrainManager.AirBrakeHandleState)numericUpDownBrakeNotch.Value;
+						TrainManager.Trains[0].Specs.AirBrake.Handle.Driver = (int)numericUpDownBrakeNotch.Value;
 					}
 					else
 					{

@@ -381,7 +381,6 @@
       <DependentUpon>formMain.cs</DependentUpon>
     </EmbeddedResource>
     <Compile Include="Parsers\Train\TrainDatParser.cs" />
-    <Compile Include="Simulation\TrainManager\Train\Handles\Handles.AirBrake.cs" />
     <EmbeddedResource Include="..\..\assets\Controls\Default.controls" />
     <None Include="OpenTK.dll.config" />
     <None Include="packages.config" />

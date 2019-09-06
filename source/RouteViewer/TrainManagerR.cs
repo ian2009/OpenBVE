@@ -26,29 +26,8 @@ namespace OpenBve {
 		}
 		internal struct Section { }
 
-		internal struct AccelerationCurve {
-			internal double StageZeroAcceleration;
-			internal double StageOneSpeed;
-			internal double StageOneAcceleration;
-			internal double StageTwoSpeed;
-			internal double StageTwoExponent;
-		}
-		internal enum AirBrakeHandleState {
-			Invalid = -1,
-			Release = 0,
-			Lap = 1,
-			Service = 2,
-		}
-		internal struct AirBrakeHandle {
-			internal AirBrakeHandleState Driver;
-			internal AirBrakeHandleState Security;
-			internal AirBrakeHandleState Actual;
-			internal AirBrakeHandleState DelayedValue;
-			internal double DelayedTime;
-		}
-		internal enum AirBrakeType { Main, Auxillary }
 		internal struct CarAirBrake {
-			internal AirBrakeType Type;
+			internal BrakeType Type;
 			internal bool AirCompressorEnabled;
 			internal double AirCompressorMinimumPressure;
 			internal double AirCompressorMaximumPressure;
@@ -265,10 +244,6 @@ namespace OpenBve {
 		}
 
 		// train
-		internal struct HandleChange {
-			internal int Value;
-			internal double Time;
-		}
 		internal struct PowerHandle {
 			internal int Driver;
 			internal int Security;
@@ -339,10 +314,10 @@ namespace OpenBve {
 			Single = 1,
 			Loop = 2
 		}
-		internal struct TrainAirBrake {
-			internal AirBrakeHandle Handle;
+		internal class TrainAirBrake {
+			internal AirBrakeHandle Handle = new AirBrakeHandle();
 		}
-		internal struct TrainSpecs {
+		internal class TrainSpecs {
 			internal ReverserHandle CurrentReverser;
 			internal int MaximumPowerNotch;
 			internal PowerHandle CurrentPowerNotch;
@@ -353,12 +328,12 @@ namespace OpenBve {
 			internal HoldBrakeHandle CurrentHoldBrake;
 			internal bool HasConstSpeed;
 			internal bool CurrentConstSpeed;
-			internal TrainAirBrake AirBrake;
+			internal TrainAirBrake AirBrake = new TrainAirBrake();
 		}
 		// train
 		internal class Train : AbstractTrain {
 			internal Car[] Cars;
-			internal TrainSpecs Specs;
+			internal TrainSpecs Specs = new TrainSpecs();
 
 			public override int NumberOfCars
 			{
