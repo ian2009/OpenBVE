@@ -1,4 +1,5 @@
 ﻿using OpenBve.RouteManager;
+using OpenBve.TrainManagement;
 using OpenBveApi;
 using OpenBveApi.Colors;
 using OpenBveApi.Interface;

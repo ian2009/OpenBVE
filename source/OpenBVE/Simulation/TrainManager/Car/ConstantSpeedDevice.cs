@@ -1,4 +1,5 @@
 ﻿using OpenBve.RouteManager;
+using OpenBve.TrainManagement;
 
 namespace OpenBve
 {

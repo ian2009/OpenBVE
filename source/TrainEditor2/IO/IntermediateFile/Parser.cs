@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using System.Xml.XPath;
+using OpenBve.BrakeSystems;
 using OpenBveApi.Colors;
 using OpenBveApi.Interface;
 using TrainEditor2.Extensions;
@@ -194,7 +195,7 @@ namespace TrainEditor2.IO.IntermediateFile
 		{
 			return new Brake
 			{
-				BrakeType = (Brake.BrakeTypes)Enum.Parse(typeof(Brake.BrakeTypes), (string)parent.Element("BrakeType")),
+				BrakeType = (BrakeSystemType)Enum.Parse(typeof(BrakeSystemType), (string)parent.Element("BrakeType")),
 				LocoBrakeType = (Brake.LocoBrakeTypes)Enum.Parse(typeof(Brake.LocoBrakeTypes), (string)parent.Element("LocoBrakeType")),
 				BrakeControlSystem = (Brake.BrakeControlSystems)Enum.Parse(typeof(Brake.BrakeControlSystems), (string)parent.Element("BrakeControlSystem")),
 				BrakeControlSpeed = (double)parent.Element("BrakeControlSpeed")

@@ -2,6 +2,7 @@
 
 namespace OpenBveApi
 {
+	/// <summary>Methods for finding the text encoding of a file</summary>
 	public static class TextEncoding
 	{
 		/// <summary>Represents a text encoding</summary>

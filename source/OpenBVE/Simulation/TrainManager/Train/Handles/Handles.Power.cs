@@ -1,4 +1,5 @@
 ﻿using OpenBve.RouteManager;
+using OpenBve.TrainManagement;
 
 namespace OpenBve
 {
@@ -15,7 +16,7 @@ namespace OpenBve
 				this.DelayDown = delayDown;
 			}
 
-			internal override void Update()
+			public override void Update()
 			{
 				if (DelayedChanges.Length == 0)
 				{

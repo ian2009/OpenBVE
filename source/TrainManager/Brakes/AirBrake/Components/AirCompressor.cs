@@ -1,22 +1,23 @@
 ﻿using OpenBve.RouteManager;
+using OpenBveApi.Hosts;
 using OpenBveApi.Trains;
 using SoundManager;
 
 namespace OpenBve.BrakeSystems
 {
 	/// <summary>An air compressor</summary>
-	class Compressor
+	public class Compressor
 	{
 		/// <summary>Whether this compressor is currently active</summary>
 		private bool Enabled;
 		/// <summary>The compression rate in Pa/s</summary>
 		private readonly double Rate;
 		/// <summary>The sound played when the compressor loop starts</summary>
-		internal CarSound StartSound;
+		public CarSound StartSound;
 		/// <summary>The sound played whilst the compressor is running</summary>
-		internal CarSound LoopSound;
+		public CarSound LoopSound;
 		/// <summary>The sound played when the compressor loop stops</summary>
-		internal CarSound EndSound;
+		public CarSound EndSound;
 		/// <summary>Whether the sound loop has started</summary>
 		private bool LoopStarted;
 		/// <summary>Stores the time at which the compressor started</summary>
@@ -26,7 +27,9 @@ namespace OpenBve.BrakeSystems
 		/// <summary>Holds the reference to the car</summary>
 		private readonly AbstractCar baseCar;
 
-		internal Compressor(double rate, MainReservoir reservoir, AbstractCar car)
+		private readonly HostInterface currentHost;
+
+		public Compressor(double rate, MainReservoir reservoir, AbstractCar car, HostInterface Host)
 		{
 			Rate = rate;
 			Enabled = false;
@@ -35,9 +38,10 @@ namespace OpenBve.BrakeSystems
 			EndSound = new CarSound();
 			mainReservoir = reservoir;
 			baseCar = car;
+			currentHost = Host;
 		}
 
-		internal void Update(double TimeElapsed)
+		public void Update(double TimeElapsed)
 		{
 			if (Enabled)
 			{
@@ -48,7 +52,7 @@ namespace OpenBve.BrakeSystems
 					SoundBuffer buffer = EndSound.Buffer;
 					if (buffer != null)
 					{
-						Program.Sounds.PlaySound(buffer, 1.0, 1.0, EndSound.Position, baseCar, false);
+						currentHost.PlaySound(buffer, 1.0, 1.0, EndSound.Position, baseCar, false);
 					}
 
 					buffer = LoopSound.Buffer;
@@ -66,7 +70,7 @@ namespace OpenBve.BrakeSystems
 						SoundBuffer buffer = LoopSound.Buffer;
 						if (buffer != null)
 						{
-							LoopSound.Source = Program.Sounds.PlaySound(buffer, 1.0, 1.0, LoopSound.Position, baseCar, true);
+							LoopSound.Source = (SoundSource)currentHost.PlaySound(buffer, 1.0, 1.0, LoopSound.Position, baseCar, true);
 						}
 					}
 				}
@@ -80,7 +84,7 @@ namespace OpenBve.BrakeSystems
 					SoundBuffer buffer = StartSound.Buffer;
 					if (buffer != null)
 					{
-						Program.Sounds.PlaySound(buffer, 1.0, 1.0, StartSound.Position, baseCar, false);
+						currentHost.PlaySound(buffer, 1.0, 1.0, StartSound.Position, baseCar, false);
 					}
 				}
 			}

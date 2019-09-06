@@ -1,7 +1,7 @@
 ﻿namespace OpenBve.BrakeSystems
 {
 	/// <summary>Defines the different types of brake system types</summary>
-	enum BrakeSystemType
+	public enum BrakeSystemType
 	{
 		/// <summary>The brake command is synchronized on all cars, however the brake pipe is used to distribute air</summary>
 		ElectromagneticStraightAirBrake = 0,

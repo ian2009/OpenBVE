@@ -1,4 +1,5 @@
 ﻿using System;
+using OpenBve.BrakeSystems;
 using Prism.Mvvm;
 
 namespace TrainEditor2.Models.Trains
@@ -8,13 +9,6 @@ namespace TrainEditor2.Models.Trains
 	/// </summary>
 	internal class Brake : BindableBase, ICloneable
 	{
-		internal enum BrakeTypes
-		{
-			ElectromagneticStraightAirBrake = 0,
-			ElectricCommandBrake = 1,
-			AutomaticAirBrake = 2
-		}
-
 		internal enum LocoBrakeTypes
 		{
 			NotFitted = 0,
@@ -29,12 +23,12 @@ namespace TrainEditor2.Models.Trains
 			DelayIncludingSystem = 2
 		}
 
-		private BrakeTypes brakeType;
+		private BrakeSystemType brakeType;
 		private LocoBrakeTypes locoBrakeType;
 		private BrakeControlSystems brakeControlSystem;
 		private double brakeControlSpeed;
 
-		internal BrakeTypes BrakeType
+		internal BrakeSystemType BrakeType
 		{
 			get
 			{
@@ -84,7 +78,7 @@ namespace TrainEditor2.Models.Trains
 
 		internal Brake()
 		{
-			BrakeType = BrakeTypes.ElectromagneticStraightAirBrake;
+			BrakeType = BrakeSystemType.ElectromagneticStraightAirBrake;
 			LocoBrakeType = LocoBrakeTypes.NotFitted;
 			BrakeControlSystem = BrakeControlSystems.None;
 			BrakeControlSpeed = 0.0;

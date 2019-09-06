@@ -1,7 +1,7 @@
 ﻿namespace OpenBve.BrakeSystems
 {
 	/// <summary>The types of electropnuematic control system available for a train with dynamic (motor assisted) braking</summary>
-	internal enum EletropneumaticBrakeType
+	public enum EletropneumaticBrakeType
 	{
 		/// <summary>The motor will always brake in addition to the physical brake, leading to a stronger braking force at all times.</summary>
 		None = 0,

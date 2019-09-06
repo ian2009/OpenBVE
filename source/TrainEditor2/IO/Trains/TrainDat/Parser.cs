@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using OpenBve.BrakeSystems;
 using OpenBveApi;
 using OpenBveApi.Interface;
 using TrainEditor2.Models.Trains;
@@ -452,7 +453,7 @@ namespace TrainEditor2.IO.Trains.TrainDat
 									case 0:
 										if (b >= 0 & b <= 2)
 										{
-											brake.BrakeType = (Brake.BrakeTypes)b;
+											brake.BrakeType = (BrakeSystemType)b;
 										}
 
 										break;

@@ -214,26 +214,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Simulation\TrainManager\Brake\AirBrake\AutomaticAirBrake.cs" />
-    <Compile Include="Simulation\TrainManager\Brake\CarBrake.BrakeType.cs" />
-    <Compile Include="Simulation\TrainManager\Brake\AirBrake\Components\AirCompressor.cs" />
-    <Compile Include="Simulation\TrainManager\Brake\AirBrake\Components\BrakeCylinder.cs" />
-    <Compile Include="Simulation\TrainManager\Brake\AirBrake\Components\BrakePipe.cs" />
-    <Compile Include="Simulation\TrainManager\Brake\AirBrake\Components\Reservoirs.cs" />
-    <Compile Include="Simulation\TrainManager\Brake\AirBrake\Components\StraightAirPipe.cs" />
-    <Compile Include="Simulation\TrainManager\Brake\AirBrake\ElectricCommandBrake.cs" />
-    <Compile Include="Simulation\TrainManager\Brake\AirBrake\ElectromagneticStraightAirBrake.cs" />
-    <Compile Include="Simulation\TrainManager\Brake\BrakeSystemType.cs" />
-    <Compile Include="Simulation\TrainManager\Brake\CarBrake.cs" />
-    <Compile Include="Simulation\TrainManager\Brake\ElectropnuematicBrakeType.cs" />
     <Compile Include="Simulation\TrainManager\Car\ConstantSpeedDevice.cs" />
     <Compile Include="Simulation\TrainManager\Car\HoldBrake.cs" />
     <Compile Include="Simulation\TrainManager\Train\SafetySystems\PilotLamp.cs" />
     <Compile Include="Simulation\TrainManager\Car\ReadhesionDevice.cs" />
     <Compile Include="Simulation\TrainManager\Car\ReadhesionDevice.Types.cs" />
-    <Compile Include="Simulation\TrainManager\Doors.DoorMode.cs" />
     <Compile Include="Simulation\TrainManager\DriverBody.cs" />
-    <Compile Include="Simulation\TrainManager\Motor\AccelerationCurve.cs" />
     <Compile Include="Simulation\TrainManager\Car\Axle.cs" />
     <Compile Include="Simulation\TrainManager\Car\Car.Bogie.cs" />
     <Compile Include="Simulation\TrainManager\Car\Car.CarSection.cs" />
@@ -245,19 +231,13 @@
     <Compile Include="Simulation\TrainManager\Motor\MotorSounds.cs" />
     <Compile Include="Simulation\TrainManager\Train\BrakeSystem.cs" />
     <Compile Include="Simulation\TrainManager\Train\DefaultSafetySystems.cs" />
-    <Compile Include="Simulation\TrainManager\Train\Handles\Handles.AirBrake.States.cs" />
-    <Compile Include="Simulation\TrainManager\Train\Handles\Handles.Eb.Behaviour.cs" />
-    <Compile Include="Simulation\TrainManager\Train\Handles\Handles.Abstract.cs" />
     <Compile Include="Simulation\TrainManager\Train\Handles\Handles.Brake.cs" />
     <Compile Include="Simulation\TrainManager\Train\Handles\Handles.cs" />
     <Compile Include="Simulation\TrainManager\Passengers.cs" />
     <Compile Include="Simulation\TrainManager\Station.cs" />
-    <Compile Include="Simulation\TrainManager\Train\Handles\Handles.EmergencyBrake.cs" />
     <Compile Include="Simulation\TrainManager\Train\Handles\Handles.HoldBrake.cs" />
     <Compile Include="Simulation\TrainManager\Train\Handles\Handles.LocoBrake.cs" />
     <Compile Include="Simulation\TrainManager\Train\Handles\Handles.Power.cs" />
-    <Compile Include="Simulation\TrainManager\Train\Handles\Handles.Reverser.cs" />
-    <Compile Include="Simulation\TrainManager\Train\Handles\Handles.Reverser.Positions.cs" />
     <Compile Include="Simulation\TrainManager\Train\Horn.cs" />
     <Compile Include="Simulation\TrainManager\Train\Handles\Handles.LocoBrake.Types.cs" />
     <Compile Include="Simulation\TrainManager\Train\Plugin.cs" />
@@ -466,6 +446,10 @@
     <ProjectReference Include="..\SoundManager\SoundManager.csproj">
       <Project>{90abfa0c-abca-444e-adef-9a299aed6524}</Project>
       <Name>SoundManager</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TrainManager\TrainManager.csproj">
+      <Project>{22a0fd12-4061-4175-8a39-5398432e0bf4}</Project>
+      <Name>TrainManager</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

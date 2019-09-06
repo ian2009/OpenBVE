@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using OpenBve.BrakeSystems;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using TrainEditor2.Extensions;
@@ -8,7 +9,7 @@ namespace TrainEditor2.ViewModels.Trains
 {
 	internal class BrakeViewModel : BaseViewModel
 	{
-		internal ReactiveProperty<Brake.BrakeTypes> BrakeType
+		internal ReactiveProperty<BrakeSystemType> BrakeType
 		{
 			get;
 		}

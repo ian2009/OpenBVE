@@ -8,6 +8,7 @@ using OpenBveApi.Interface;
 using OpenBveApi.Trains;
 using OpenBve.RouteManager;
 using OpenBve.SafetySystems;
+using OpenBve.TrainManagement;
 using OpenBveApi;
 using OpenBveApi.Math;
 using SoundManager;

@@ -1,6 +1,6 @@
 ﻿namespace OpenBve.BrakeSystems
 {
-	internal enum BrakeType
+	public enum BrakeType
 	{
 		/// <summary>The brake system has an air compressor</summary>
 		Main = 0,

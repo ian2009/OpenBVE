@@ -155,6 +155,10 @@
       <Project>{90abfa0c-abca-444e-adef-9a299aed6524}</Project>
       <Name>SoundManager</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TrainManager\TrainManager.csproj">
+      <Project>{22a0fd12-4061-4175-8a39-5398432e0bf4}</Project>
+      <Name>TrainManager</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
+using OpenBve.BrakeSystems;
 using Reactive.Bindings.Binding;
 using Reactive.Bindings.Extensions;
 using TrainEditor2.Extensions;
@@ -21,7 +22,7 @@ namespace TrainEditor2.Views
 					w => w.SelectedIndex,
 					BindingMode.TwoWay,
 					w => (int)w,
-					w => (Brake.BrakeTypes)w,
+					w => (BrakeSystemType)w,
 					Observable.FromEvent<EventHandler, EventArgs>(
 							h => (s, e) => h(e),
 							h => comboBoxBrakeType.SelectedIndexChanged += h,

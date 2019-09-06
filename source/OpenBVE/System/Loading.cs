@@ -10,6 +10,7 @@ using OpenBveApi.Objects;
 using OpenBveApi.Runtime;
 using OpenBveApi.Trains;
 using OpenBve.RouteManager;
+using OpenBve.TrainManagement;
 using OpenBveApi.Routes;
 
 namespace OpenBve {
@@ -401,8 +402,8 @@ namespace OpenBve {
 				} else if (TrainManager.Trains[k].State != TrainState.Bogus) {
 					TrainManager.Trains[k].AI = new Game.SimpleHumanDriverAI(TrainManager.Trains[k]);
 					TrainManager.Trains[k].TimetableDelta = Game.PrecedingTrainTimeDeltas[k];
-					TrainManager.Trains[k].Specs.DoorOpenMode = TrainManager.DoorMode.Manual;
-					TrainManager.Trains[k].Specs.DoorCloseMode = TrainManager.DoorMode.Manual;
+					TrainManager.Trains[k].Specs.DoorOpenMode = DoorMode.Manual;
+					TrainManager.Trains[k].Specs.DoorCloseMode = DoorMode.Manual;
 				}
 			}
 			/*

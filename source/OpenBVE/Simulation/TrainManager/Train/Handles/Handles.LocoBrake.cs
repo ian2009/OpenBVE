@@ -1,4 +1,5 @@
 ﻿using OpenBve.RouteManager;
+using OpenBve.TrainManagement;
 
 namespace OpenBve
 {
@@ -18,7 +19,7 @@ namespace OpenBve
 			/// <summary>Provides a reference to the associated EB handle</summary>
 			private readonly EmergencyHandle EmergencyBrake;
 
-			internal override void Update()
+			public override void Update()
 			{
 				int sec = EmergencyBrake.Safety ? MaximumNotch : Safety;
 				if (DelayedChanges.Length == 0)
@@ -65,7 +66,7 @@ namespace OpenBve
 				this.MaximumNotch = 3;
 			}
 
-			internal override void Update()
+			public override void Update()
 			{
 				if (DelayedValue != AirBrakeHandleState.Invalid)
 				{

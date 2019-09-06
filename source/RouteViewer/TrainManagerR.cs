@@ -5,6 +5,8 @@
 // ║ The file from the openBVE main program cannot be used here. ║
 // ╚═════════════════════════════════════════════════════════════╝
 
+using OpenBve.BrakeSystems;
+using OpenBve.TrainManagement;
 using OpenBveApi.Math;
 using OpenBveApi.Routes;
 using OpenBveApi.Trains;
@@ -24,27 +26,12 @@ namespace OpenBve {
 		}
 		internal struct Section { }
 
-		// cars
-		internal struct Door {
-			internal int Direction;
-			internal double State;
-		}
 		internal struct AccelerationCurve {
 			internal double StageZeroAcceleration;
 			internal double StageOneSpeed;
 			internal double StageOneAcceleration;
 			internal double StageTwoSpeed;
 			internal double StageTwoExponent;
-		}
-		internal enum CarBrakeType {
-			ElectromagneticStraightAirBrake = 0,
-			ElectricCommandBrake = 1,
-			AutomaticAirBrake = 2
-		}
-		internal enum EletropneumaticBrakeType {
-			None = 0,
-			ClosingElectromagneticValve = 1,
-			DelayFillingControl = 2
 		}
 		internal enum AirBrakeHandleState {
 			Invalid = -1,
@@ -139,7 +126,7 @@ namespace OpenBve {
 			internal CarHoldBrake HoldBrake;
 			internal CarConstSpeed ConstSpeed;
 			internal CarReAdhesionDevice ReAdhesionDevice;
-			internal CarBrakeType BrakeType;
+			internal BrakeSystemType BrakeType;
 			internal EletropneumaticBrakeType ElectropneumaticType;
 			internal CarAirBrake AirBrake;
 			internal Door[] Doors;

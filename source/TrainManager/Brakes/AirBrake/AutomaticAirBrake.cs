@@ -1,8 +1,10 @@
-﻿namespace OpenBve.BrakeSystems
+﻿using OpenBve.TrainManagement;
+
+namespace OpenBve.BrakeSystems
 {
-	class AutomaticAirBrake : CarBrake
+	public class AutomaticAirBrake : CarBrake
 	{
-		internal AutomaticAirBrake(EletropneumaticBrakeType type, TrainManager.EmergencyHandle EmergencyHandle, TrainManager.ReverserHandle ReverserHandle, bool IsMotorCar, double BrakeControlSpeed, double MotorDeceleration, TrainManager.AccelerationCurve[] DecelerationCurves)
+		public AutomaticAirBrake(EletropneumaticBrakeType type, EmergencyHandle EmergencyHandle, ReverserHandle ReverserHandle, bool IsMotorCar, double BrakeControlSpeed, double MotorDeceleration, AccelerationCurve[] DecelerationCurves)
 		{
 			electropneumaticBrakeType = type;
 			emergencyHandle = EmergencyHandle;
@@ -13,7 +15,7 @@
 			decelerationCurves = DecelerationCurves;
 		}
 
-		internal override void Update(double TimeElapsed, double currentSpeed, TrainManager.AbstractHandle brakeHandle, out double deceleration)
+		public override void Update(double TimeElapsed, double currentSpeed, AbstractHandle brakeHandle, out double deceleration)
 		{
 			airSound = null;
 			if (emergencyHandle.Actual == true)
@@ -32,10 +34,10 @@
 				}
 			}
 			//First update the main reservoir pressure from the equalizing reservoir
-			TrainManager.AirBrakeHandleState state = (TrainManager.AirBrakeHandleState)brakeHandle.Actual;
+			AirBrakeHandleState state = (AirBrakeHandleState)brakeHandle.Actual;
 			switch (state)
 			{
-				case TrainManager.AirBrakeHandleState.Service:
+				case AirBrakeHandleState.Service:
 				{
 					double r = equalizingReservoir.ServiceRate; //50000
 					double d = equalizingReservoir.CurrentPressure;
@@ -50,7 +52,7 @@
 					break;
 				}
 
-				case TrainManager.AirBrakeHandleState.Release:
+				case AirBrakeHandleState.Release:
 				{
 					double r = equalizingReservoir.ChargeRate;
 					double d = equalizingReservoir.NormalPressure - equalizingReservoir.CurrentPressure;

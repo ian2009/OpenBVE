@@ -1,4 +1,5 @@
-﻿using OpenBveApi.Math;
+﻿using OpenBve.TrainManagement;
+using OpenBveApi.Math;
 using SoundManager;
 
 namespace OpenBve

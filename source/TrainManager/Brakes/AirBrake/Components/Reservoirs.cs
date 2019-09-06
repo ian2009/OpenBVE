@@ -1,20 +1,22 @@
-﻿namespace OpenBve.BrakeSystems
+﻿using System;
+
+namespace OpenBve.BrakeSystems
 {
 	/// <summary>An auxiliary reservoir</summary>
-	class AuxiliaryReservoir
+	public class AuxiliaryReservoir
 	{
 		/// <summary>The charge rate in Pa/s</summary>
 		internal readonly double ChargeRate;
 		/// <summary>The current pressure</summary>
-		internal double CurrentPressure;
+		public double CurrentPressure;
 		/// <summary>The maximum pressure</summary>
-		internal readonly double MaximumPressure;
+		public readonly double MaximumPressure;
 		/// <summary>The co-efficient used when transferring pressure to the brake pipe</summary>
 		internal readonly double BrakePipeCoefficient;
 		/// <summary>The co-efficient used when transferring pressure to the brake cylinder</summary>
 		internal readonly double BrakeCylinderCoefficient;
 
-		internal AuxiliaryReservoir(double maximumPressure, double chargeRate, double brakePipeCoefficient, double brakeCylinderCoefficent)
+		public AuxiliaryReservoir(double maximumPressure, double chargeRate, double brakePipeCoefficient, double brakeCylinderCoefficent)
 		{
 			ChargeRate = chargeRate;
 			MaximumPressure = maximumPressure;
@@ -25,7 +27,7 @@
 	}
 
 	/// <summary>An equalising reservoir</summary>
-	class EqualizingReservoir
+	public class EqualizingReservoir
 	{
 		/// <summary>The rate when service brakes are applied in Pa/s</summary>
 		internal readonly double ServiceRate;
@@ -34,11 +36,11 @@
 		/// <summary>The charge rate in Pa/s</summary>
 		internal readonly double ChargeRate;
 		/// <summary>The current pressure</summary>
-		internal double CurrentPressure;
+		public double CurrentPressure;
 		/// <summary>The normal pressure</summary>
-		internal double NormalPressure;
+		public double NormalPressure;
 
-		internal EqualizingReservoir(double serviceRate, double emergencyRate, double chargeRate)
+		public EqualizingReservoir(double serviceRate, double emergencyRate, double chargeRate)
 		{
 			ServiceRate = serviceRate;
 			EmergencyRate = emergencyRate;
@@ -48,26 +50,26 @@
 	}
 
 	/// <summary>A main reservoir</summary>
-	class MainReservoir
+	public class MainReservoir
 	{
 		/// <summary>The current pressure</summary>
-		internal double CurrentPressure;
+		public double CurrentPressure;
 		/// <summary>The minimum pressure</summary>
 		internal readonly double MinimumPressure;
 		/// <summary>The maximum pressure</summary>
-		internal readonly double MaximumPressure;
+		public readonly double MaximumPressure;
 		/// <summary>The co-efficient used when transferring pressure to the equalizing reservoir</summary>
 		internal readonly double EqualizingReservoirCoefficient;
 		/// <summary>The co-efficient used when transferring pressure to the brake pipe</summary>
 		internal readonly double BrakePipeCoefficient;
 
-		internal MainReservoir(double minimumPressure, double maximumPressure, double equalizingReservoirCoefficient, double brakePipeCoefficient)
+		public MainReservoir(double minimumPressure, double maximumPressure, double equalizingReservoirCoefficient, double brakePipeCoefficient)
 		{
 			MinimumPressure = minimumPressure;
 			MaximumPressure = maximumPressure;
 			EqualizingReservoirCoefficient = equalizingReservoirCoefficient;
 			BrakePipeCoefficient = brakePipeCoefficient;
-			CurrentPressure = MinimumPressure + (MaximumPressure - MinimumPressure) * Program.RandomNumberGenerator.NextDouble();
+			CurrentPressure = MinimumPressure + (MaximumPressure - MinimumPressure) * new Random().NextDouble();
 		}
 	}
 }

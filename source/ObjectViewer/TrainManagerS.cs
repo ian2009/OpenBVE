@@ -5,6 +5,8 @@
 // ║ The file from the openBVE main program cannot be used here. ║
 // ╚═════════════════════════════════════════════════════════════╝
 
+using OpenBve.BrakeSystems;
+using OpenBve.TrainManagement;
 using OpenBveApi.Math;
 using OpenBveApi.Routes;
 using OpenBveApi.Trains;
@@ -18,23 +20,6 @@ namespace OpenBve {
 		// structures
 		internal struct Axle {
 			internal TrackFollower Follower;
-		}
-
-		// cars
-		internal struct Door {
-			internal int Direction;
-			internal double State;
-		}
-		
-		internal enum CarBrakeType {
-			ElectromagneticStraightAirBrake = 0, //電磁直通
-			ElectricCommandBrake = 1, //電気指令式
-			AutomaticAirBrake = 2 //自動空気
-		}
-		internal enum EletropneumaticBrakeType {
-			None = 0,
-			ClosingElectromagneticValve = 1, //締切電磁弁
-			DelayFillingControl = 2 //遅れ込め制御
 		}
 		internal enum AirBrakeHandleState {
 			Invalid = -1,
@@ -128,7 +113,7 @@ namespace OpenBve {
 			internal CarHoldBrake HoldBrake;
 			internal CarConstSpeed ConstSpeed;
 			internal CarReAdhesionDevice ReAdhesionDevice;
-			internal CarBrakeType BrakeType;
+			internal BrakeSystemType BrakeType;
 			internal EletropneumaticBrakeType ElectropneumaticType;
 			internal CarAirBrake AirBrake;
 			internal Door[] Doors;

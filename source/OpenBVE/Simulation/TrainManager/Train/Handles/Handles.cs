@@ -1,4 +1,6 @@
-﻿namespace OpenBve
+﻿using OpenBve.TrainManagement;
+
+namespace OpenBve
 {
 	public static partial class TrainManager
 	{
@@ -25,12 +27,6 @@
 			internal bool HasLocoBrake;
 			/// <summary>The loco brake type</summary>
 			internal LocoBrakeType LocoBrakeType;
-		}
-
-		internal struct HandleChange
-		{
-			internal int Value;
-			internal double Time;
 		}
 	}
 }

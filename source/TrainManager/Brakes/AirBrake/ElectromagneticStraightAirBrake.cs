@@ -1,10 +1,11 @@
 ﻿using System;
+using OpenBve.TrainManagement;
 
 namespace OpenBve.BrakeSystems
 {
-	class ElectromagneticStraightAirBrake : CarBrake
+	public class ElectromagneticStraightAirBrake : CarBrake
 	{
-		internal ElectromagneticStraightAirBrake(EletropneumaticBrakeType type, TrainManager.EmergencyHandle EmergencyHandle, TrainManager.ReverserHandle ReverserHandle, bool IsMotorCar, double BrakeControlSpeed, double MotorDeceleration, TrainManager.AccelerationCurve[] DecelerationCurves)
+		public ElectromagneticStraightAirBrake(EletropneumaticBrakeType type, EmergencyHandle EmergencyHandle, ReverserHandle ReverserHandle, bool IsMotorCar, double BrakeControlSpeed, double MotorDeceleration, AccelerationCurve[] DecelerationCurves)
 		{
 			electropneumaticBrakeType = type;
 			emergencyHandle = EmergencyHandle;
@@ -15,7 +16,7 @@ namespace OpenBve.BrakeSystems
 			decelerationCurves = DecelerationCurves;
 		}
 
-		internal override void Update(double TimeElapsed, double currentSpeed, TrainManager.AbstractHandle brakeHandle, out double deceleration)
+		public override void Update(double TimeElapsed, double currentSpeed, AbstractHandle brakeHandle, out double deceleration)
 		{
 			airSound = null;
 			if (emergencyHandle.Actual == true)

@@ -1,6 +1,7 @@
 ﻿using System;
 using OpenBveApi.Trains;
 using OpenBve.RouteManager;
+using OpenBve.TrainManagement;
 
 namespace OpenBve
 {
@@ -103,7 +104,7 @@ namespace OpenBve
 				else
 				{
 					train.ApplyNotch(0, false, train.Handles.Brake.MaximumNotch, false);
-					train.ApplyAirBrakeHandle(TrainManager.AirBrakeHandleState.Service);
+					train.ApplyAirBrakeHandle(AirBrakeHandleState.Service);
 				}
 				if (CurrentRoute.Sections.Length > 0)
 				{

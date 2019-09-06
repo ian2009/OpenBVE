@@ -1,4 +1,5 @@
 ﻿using OpenBve.RouteManager;
+using OpenBve.TrainManagement;
 
 namespace OpenBve
 {
@@ -15,7 +16,7 @@ namespace OpenBve
 				this.MaximumNotch = 3;
 			}
 
-			internal override void Update()
+			public override void Update()
 			{
 				if (DelayedValue != AirBrakeHandleState.Invalid)
 				{

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows.Forms;
 using OpenBve.BrakeSystems;
 using OpenBve.SafetySystems;
+using OpenBve.TrainManagement;
 using OpenBveApi.Math;
 using OpenBveApi.Interface;
 using OpenBveApi.Routes;
@@ -115,7 +116,7 @@ namespace OpenBve {
 			double CoefficientOfStaticFriction = 0.35;
 			double CoefficientOfRollingResistance = 0.0025;
 			double AerodynamicDragCoefficient = 1.1;
-			TrainManager.BveAccelerationCurve[] AccelerationCurves = new TrainManager.BveAccelerationCurve[] { };
+			BveAccelerationCurve[] AccelerationCurves = new BveAccelerationCurve[] { };
 			Vector3 Driver = new Vector3();
 			int DriverCar = 0;
 			double MotorCarMass = 1.0, TrailerCarMass = 1.0;
@@ -129,7 +130,7 @@ namespace OpenBve {
 			bool FrontCarIsMotorCar = true;
 			TrainManager.ReadhesionDeviceType ReAdhesionDevice = TrainManager.ReadhesionDeviceType.TypeA;
 			PassAlarmType passAlarm = PassAlarmType.None;
-			Train.Handles.EmergencyBrake = new TrainManager.EmergencyHandle();
+			Train.Handles.EmergencyBrake = new EmergencyHandle();
 			Train.Handles.HasLocoBrake = false;
 			double[] powerDelayUp = { }, powerDelayDown = { }, brakeDelayUp = { }, brakeDelayDown = { }, locoBrakeDelayUp = { }, locoBrakeDelayDown = { };
 			int powerNotches = 0, brakeNotches = 0, locoBrakeNotches = 0, powerReduceSteps = -1, locoBrakeType = 0, driverPowerNotches = 0, driverBrakeNotches = 0;
@@ -154,8 +155,8 @@ namespace OpenBve {
 				switch (Lines[i].ToLowerInvariant()) {
 					case "#acceleration":
 						i++; while (i < Lines.Length && !Lines[i].StartsWith("#", StringComparison.Ordinal)) {
-							Array.Resize<TrainManager.BveAccelerationCurve>(ref AccelerationCurves, n + 1);
-							AccelerationCurves[n] = new TrainManager.BveAccelerationCurve();
+							Array.Resize(ref AccelerationCurves, n + 1);
+							AccelerationCurves[n] = new BveAccelerationCurve();
 							string t = Lines[i] + ",";
 							int m = 0;
 							while (true) {
@@ -534,7 +535,7 @@ namespace OpenBve {
 											Interface.AddMessage(MessageType.Error, false, "EbHandleBehaviour is invalid at line " + (i + 1).ToString(Culture) + " in " + FileName);
 											break;
 										}
-										Train.Handles.EmergencyBrake.OtherHandlesBehaviour = (TrainManager.EbHandleBehaviour) a;
+										Train.Handles.EmergencyBrake.OtherHandlesBehaviour = (EbHandleBehaviour) a;
 										break;
 									case 5:
 										if (a >= 0)
@@ -709,7 +710,7 @@ namespace OpenBve {
 										{
 											int b = (int)Math.Round(a);
 											if (b >= 0 & b <= 2) {
-												Train.Specs.DoorOpenMode = (TrainManager.DoorMode)b;
+												Train.Specs.DoorOpenMode = (DoorMode)b;
 											} else {
 												Interface.AddMessage(MessageType.Error, false, "DoorOpenMode is invalid at line " + (i + 1).ToString(Culture) + " in " + FileName);
 											} break;
@@ -718,7 +719,7 @@ namespace OpenBve {
 										{
 											int b = (int)Math.Round(a);
 											if (b >= 0 & b <= 2) {
-												Train.Specs.DoorCloseMode = (TrainManager.DoorMode)b;
+												Train.Specs.DoorCloseMode = (DoorMode)b;
 											} else {
 												Interface.AddMessage(MessageType.Error, false, "DoorCloseMode is invalid at line " + (i + 1).ToString(Culture) + " in " + FileName);
 											} break;
@@ -833,7 +834,7 @@ namespace OpenBve {
 				}
 				driverBrakeNotches = brakeNotches;
 			}
-			Train.Handles.Reverser = new TrainManager.ReverserHandle();
+			Train.Handles.Reverser = new ReverserHandle();
 			Train.Handles.Power = new TrainManager.PowerHandle(powerNotches, driverPowerNotches, powerDelayUp, powerDelayDown);
 			if (powerReduceSteps != -1)
 			{
@@ -993,9 +994,9 @@ namespace OpenBve {
 			double MotorDeceleration = Math.Sqrt(MaximumAcceleration * BrakeDeceleration);
 			// apply brake-specific attributes for all cars
 			for (int i = 0; i < Cars; i++) {
-				TrainManager.AccelerationCurve[] DecelerationCurves = new TrainManager.AccelerationCurve[]
+				AccelerationCurve[] DecelerationCurves = new AccelerationCurve[]
 				{
-					new TrainManager.BveDecelerationCurve(BrakeDeceleration), 
+					new BveDecelerationCurve(BrakeDeceleration), 
 				};
 				Train.Cars[i].Specs.MotorDeceleration = MotorDeceleration;
 				if (i == Train.DriverCar && Train.Handles.HasLocoBrake)
@@ -1038,7 +1039,7 @@ namespace OpenBve {
 					Train.Cars[i].CarBrake.brakeType = BrakeType.Auxiliary;
 				}
 				Train.Cars[i].CarBrake.mainReservoir = new MainReservoir(MainReservoirMinimumPressure, MainReservoirMaximumPressure, 0.01, (trainBrakeType == BrakeSystemType.AutomaticAirBrake ? 0.25 : 0.075) / Cars);
-				Train.Cars[i].CarBrake.airCompressor = new Compressor(5000.0, Train.Cars[i].CarBrake.mainReservoir, Train.Cars[i]);
+				Train.Cars[i].CarBrake.airCompressor = new Compressor(5000.0, Train.Cars[i].CarBrake.mainReservoir, Train.Cars[i], Program.CurrentHost);
 				Train.Cars[i].CarBrake.equalizingReservoir = new EqualizingReservoir(50000.0, 250000.0, 200000.0);
 				Train.Cars[i].CarBrake.equalizingReservoir.NormalPressure = 1.005 * OperatingPressure;
 				
@@ -1061,7 +1062,7 @@ namespace OpenBve {
 			Train.Handles.Power.Driver = 0;
 			Train.Handles.Power.Safety = 0;
 			Train.Handles.Power.Actual = 0;
-			Train.Handles.Power.DelayedChanges = new TrainManager.HandleChange[] { };
+			Train.Handles.Power.DelayedChanges = new HandleChange[] { };
 			Train.Handles.Brake.Driver = 0;
 			Train.Handles.Brake.Safety = 0;
 			Train.Handles.Brake.Actual = 0;
@@ -1086,9 +1087,9 @@ namespace OpenBve {
 
 					if (trainBrakeType == BrakeSystemType.AutomaticAirBrake)
 					{
-						Train.Handles.Brake.Driver = (int)TrainManager.AirBrakeHandleState.Service;
-						Train.Handles.Brake.Safety = (int)TrainManager.AirBrakeHandleState.Service;
-						Train.Handles.Brake.Actual = (int)TrainManager.AirBrakeHandleState.Service;
+						Train.Handles.Brake.Driver = (int)AirBrakeHandleState.Service;
+						Train.Handles.Brake.Safety = (int)AirBrakeHandleState.Service;
+						Train.Handles.Brake.Actual = (int)AirBrakeHandleState.Service;
 					}
 					else
 					{
@@ -1100,8 +1101,8 @@ namespace OpenBve {
 					Train.Handles.EmergencyBrake.Driver = false;
 					Train.Handles.EmergencyBrake.Safety = false;
 					Train.Handles.EmergencyBrake.Actual = false;
-					Train.Handles.Reverser.Driver = TrainManager.ReverserPosition.Forwards;
-					Train.Handles.Reverser.Actual = TrainManager.ReverserPosition.Forwards;
+					Train.Handles.Reverser.Driver = ReverserPosition.Forwards;
+					Train.Handles.Reverser.Actual = ReverserPosition.Forwards;
 					break;
 				case TrainStartMode.EmergencyBrakesAts:
 					for (int i = 0; i < Cars; i++) {
@@ -1113,9 +1114,9 @@ namespace OpenBve {
 
 					if (trainBrakeType == BrakeSystemType.AutomaticAirBrake)
 					{
-						Train.Handles.Brake.Driver = (int)TrainManager.AirBrakeHandleState.Service;
-						Train.Handles.Brake.Safety = (int)TrainManager.AirBrakeHandleState.Service;
-						Train.Handles.Brake.Actual = (int)TrainManager.AirBrakeHandleState.Service;
+						Train.Handles.Brake.Driver = (int)AirBrakeHandleState.Service;
+						Train.Handles.Brake.Safety = (int)AirBrakeHandleState.Service;
+						Train.Handles.Brake.Actual = (int)AirBrakeHandleState.Service;
 					}
 					else
 					{
@@ -1138,9 +1139,9 @@ namespace OpenBve {
 
 					if (trainBrakeType == BrakeSystemType.AutomaticAirBrake)
 					{
-						Train.Handles.Brake.Driver = (int)TrainManager.AirBrakeHandleState.Service;
-						Train.Handles.Brake.Safety = (int)TrainManager.AirBrakeHandleState.Service;
-						Train.Handles.Brake.Actual = (int)TrainManager.AirBrakeHandleState.Service;
+						Train.Handles.Brake.Driver = (int)AirBrakeHandleState.Service;
+						Train.Handles.Brake.Safety = (int)AirBrakeHandleState.Service;
+						Train.Handles.Brake.Actual = (int)AirBrakeHandleState.Service;
 					}
 					else
 					{
@@ -1251,7 +1252,7 @@ namespace OpenBve {
 					// trailer car
 					Train.Cars[i].Specs.MassEmpty = TrailerCarMass;
 					Train.Cars[i].Specs.MassCurrent = TrailerCarMass;
-					Train.Cars[i].Specs.AccelerationCurves = new TrainManager.AccelerationCurve[] { };
+					Train.Cars[i].Specs.AccelerationCurves = new AccelerationCurve[] { };
 					Train.Cars[i].Specs.AccelerationCurveMaximum = 0.0;
 					Train.Cars[i].Sounds.Motor.SpeedConversionFactor = 18.0;
 					Train.Cars[i].Sounds.Motor.Tables = new TrainManager.MotorSoundTable[4];

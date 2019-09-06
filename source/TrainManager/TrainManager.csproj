@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{22A0FD12-4061-4175-8A39-5398432E0BF4}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TrainManager</RootNamespace>
+    <AssemblyName>TrainManager</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Brakes\AirBrake\AutomaticAirBrake.cs" />
+    <Compile Include="Brakes\AirBrake\ElectricCommandBrake.cs" />
+    <Compile Include="Brakes\AirBrake\ElectromagneticStraightAirBrake.cs" />
+    <Compile Include="Brakes\CarBrake.BrakeTypes.cs" />
+    <Compile Include="Brakes\CarBrake.cs" />
+    <Compile Include="Brakes\AirBrake\Components\AirCompressor.cs" />
+    <Compile Include="Brakes\AirBrake\Components\BrakeCylinder.cs" />
+    <Compile Include="Brakes\AirBrake\Components\BrakePipe.cs" />
+    <Compile Include="Brakes\AirBrake\Components\Reservoirs.cs" />
+    <Compile Include="Brakes\AirBrake\Components\StraightAirPipe.cs" />
+    <Compile Include="Brakes\BrakeSystemType.cs" />
+    <Compile Include="Brakes\ElectropneumaticBrakeType.cs" />
+    <Compile Include="Doors\Door.Modes.cs" />
+    <Compile Include="Doors\Door.cs" />
+    <Compile Include="Doors\TrainDoorState.cs" />
+    <Compile Include="Handles\AbstractHandle.cs" />
+    <Compile Include="Handles\AbstractHandle.Notched.cs" />
+    <Compile Include="Handles\HandleChange.cs" />
+    <Compile Include="Handles\Handles.AirBrake.States.cs" />
+    <Compile Include="Handles\Handles.Eb.Behaviour.cs" />
+    <Compile Include="Handles\Handles.EmergencyBrake.cs" />
+    <Compile Include="Handles\Handles.Reverser.cs" />
+    <Compile Include="Handles\Handles.Reverser.Positions.cs" />
+    <Compile Include="Motor\Acceleration\AccelerationCurves.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OpenBveApi\OpenBveApi.csproj">
+      <Project>{27134980-4415-4375-a564-40a9014dfa5f}</Project>
+      <Name>OpenBveApi</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RouteManager\RouteManager.csproj">
+      <Project>{87838364-8911-46b2-8628-d437c485d9c9}</Project>
+      <Name>RouteManager</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SoundManager\SoundManager.csproj">
+      <Project>{90abfa0c-abca-444e-adef-9a299aed6524}</Project>
+      <Name>SoundManager</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
