@@ -835,7 +835,7 @@ namespace OpenBve {
 				driverBrakeNotches = brakeNotches;
 			}
 			Train.Handles.Reverser = new ReverserHandle();
-			Train.Handles.Power = new TrainManager.PowerHandle(powerNotches, driverPowerNotches, powerDelayUp, powerDelayDown);
+			Train.Handles.Power = new PowerHandle(powerNotches, driverPowerNotches, powerDelayUp, powerDelayDown);
 			if (powerReduceSteps != -1)
 			{
 				Train.Handles.Power.ReduceSteps = powerReduceSteps;
@@ -847,7 +847,7 @@ namespace OpenBve {
 			}
 			else
 			{
-				Train.Handles.Brake = new TrainManager.BrakeHandle(brakeNotches, driverBrakeNotches, Train.Handles.EmergencyBrake, brakeDelayUp, brakeDelayDown);
+				Train.Handles.Brake = new BrakeHandle(brakeNotches, driverBrakeNotches, Train.Handles.EmergencyBrake, brakeDelayUp, brakeDelayDown);
 				
 			}
 

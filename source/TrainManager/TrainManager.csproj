@@ -62,11 +62,13 @@
     <Compile Include="Doors\TrainDoorState.cs" />
     <Compile Include="Handles\AbstractHandle.cs" />
     <Compile Include="Handles\AbstractHandle.Notched.cs" />
+    <Compile Include="Handles\BrakeHandle.cs" />
     <Compile Include="Handles\HandleChange.cs" />
     <Compile Include="Handles\Handles.AirBrake.cs" />
     <Compile Include="Handles\Handles.AirBrake.States.cs" />
     <Compile Include="Handles\Handles.Eb.Behaviour.cs" />
     <Compile Include="Handles\Handles.EmergencyBrake.cs" />
+    <Compile Include="Handles\Handles.Power.cs" />
     <Compile Include="Handles\Handles.Reverser.cs" />
     <Compile Include="Handles\Handles.Reverser.Positions.cs" />
     <Compile Include="Motor\Acceleration\AccelerationCurves.cs" />
