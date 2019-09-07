@@ -26,42 +26,6 @@ namespace OpenBve {
 		}
 		internal struct Section { }
 
-		internal struct CarAirBrake {
-			internal BrakeType Type;
-			internal bool AirCompressorEnabled;
-			internal double AirCompressorMinimumPressure;
-			internal double AirCompressorMaximumPressure;
-			internal double AirCompressorRate;
-			internal double MainReservoirCurrentPressure;
-			internal double MainReservoirEqualizingReservoirCoefficient;
-			internal double MainReservoirBrakePipeCoefficient;
-			internal double EqualizingReservoirCurrentPressure;
-			internal double EqualizingReservoirNormalPressure;
-			internal double EqualizingReservoirServiceRate;
-			internal double EqualizingReservoirEmergencyRate;
-			internal double EqualizingReservoirChargeRate;
-			internal double BrakePipeCurrentPressure;
-			internal double BrakePipeNormalPressure;
-			internal double BrakePipeChargeRate;
-			internal double BrakePipeServiceRate;
-			internal double BrakePipeEmergencyRate;
-			internal double AuxillaryReservoirCurrentPressure;
-			internal double AuxillaryReservoirMaximumPressure;
-			internal double AuxillaryReservoirChargeRate;
-			internal double AuxillaryReservoirBrakePipeCoefficient;
-			internal double AuxillaryReservoirBrakeCylinderCoefficient;
-			internal double BrakeCylinderCurrentPressure;
-			internal double BrakeCylinderEmergencyMaximumPressure;
-			internal double BrakeCylinderServiceMaximumPressure;
-			internal double BrakeCylinderEmergencyChargeRate;
-			internal double BrakeCylinderServiceChargeRate;
-			internal double BrakeCylinderReleaseRate;
-			internal double BrakeCylinderSoundPlayedForPressure;
-			internal double StraightAirPipeCurrentPressure;
-			internal double StraightAirPipeReleaseRate;
-			internal double StraightAirPipeServiceRate;
-			internal double StraightAirPipeEmergencyRate;
-		}
 		internal struct CarHoldBrake {
 			internal double CurrentAccelerationOutput;
 			internal double NextUpdateTime;
@@ -107,7 +71,7 @@ namespace OpenBve {
 			internal CarReAdhesionDevice ReAdhesionDevice;
 			internal BrakeSystemType BrakeType;
 			internal EletropneumaticBrakeType ElectropneumaticType;
-			internal CarAirBrake AirBrake;
+			internal CarBrake AirBrake;
 			internal Door[] Doors;
 			internal double DoorOpenSpeed;
 			internal double DoorCloseSpeed;
