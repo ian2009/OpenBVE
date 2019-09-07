@@ -209,7 +209,7 @@ namespace OpenBve
 										// brake half/full-axis
 										if (!TrainManager.PlayerTrain.Handles.SingleHandle)
 										{
-											if (TrainManager.PlayerTrain.Handles.Brake is TrainManager.AirBrakeHandle)
+											if (TrainManager.PlayerTrain.Handles.Brake is AirBrakeHandle)
 											{
 												double a = Interface.CurrentControls[i].AnalogState;
 												if (Interface.CurrentControls[i].Command ==
@@ -1187,7 +1187,7 @@ namespace OpenBve
 										// brake increase
 										if (!TrainManager.PlayerTrain.Handles.SingleHandle)
 										{
-											if (TrainManager.PlayerTrain.Handles.Brake is TrainManager.AirBrakeHandle)
+											if (TrainManager.PlayerTrain.Handles.Brake is AirBrakeHandle)
 											{
 												if (TrainManager.PlayerTrain.Handles.HasHoldBrake &
 													TrainManager.PlayerTrain.Handles.Brake.Driver ==
@@ -1233,7 +1233,7 @@ namespace OpenBve
 										// brake decrease
 										if (!TrainManager.PlayerTrain.Handles.SingleHandle)
 										{
-											if (TrainManager.PlayerTrain.Handles.Brake is TrainManager.AirBrakeHandle)
+											if (TrainManager.PlayerTrain.Handles.Brake is AirBrakeHandle)
 											{
 												if (TrainManager.PlayerTrain.Handles.EmergencyBrake.Driver)
 												{
@@ -1341,7 +1341,7 @@ namespace OpenBve
 										TrainManager.PlayerTrain.ApplyNotch(Interface.CurrentControls[i].Option, false, 0, !TrainManager.PlayerTrain.Handles.SingleHandle);
 										break;
 									case Translations.Command.BrakeAnyNotch:
-										if (TrainManager.PlayerTrain.Handles.Brake is TrainManager.AirBrakeHandle)
+										if (TrainManager.PlayerTrain.Handles.Brake is AirBrakeHandle)
 										{
 											if (TrainManager.PlayerTrain.Handles.EmergencyBrake.Driver)
 											{

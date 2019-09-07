@@ -165,7 +165,7 @@ namespace OpenBve {
 				int reverser = (int)this.Train.Handles.Reverser.Driver;
 				int powerNotch = this.Train.Handles.Power.Driver;
 				int brakeNotch;
-				if (this.Train.Handles.Brake is TrainManager.AirBrakeHandle) {
+				if (this.Train.Handles.Brake is AirBrakeHandle) {
 					brakeNotch = this.Train.Handles.EmergencyBrake.Driver ? 3 : this.Train.Handles.Brake.Driver == (int)AirBrakeHandleState.Service ? 2 : this.Train.Handles.Brake.Driver == (int)AirBrakeHandleState.Lap ? 1 : 0;
 				} else {
 					if (this.Train.Handles.HasHoldBrake) {
@@ -225,7 +225,7 @@ namespace OpenBve {
 					this.Train.Handles.EmergencyBrake.Safety = false;
 					this.Train.Handles.HoldBrake.Actual = false;
 				}
-				if (this.Train.Handles.Brake is TrainManager.AirBrakeHandle) {
+				if (this.Train.Handles.Brake is AirBrakeHandle) {
 					if (handles.BrakeNotch == 0) {
 						if (virtualHandles) {
 							this.Train.Handles.Brake.Safety = (int)AirBrakeHandleState.Release;
@@ -360,7 +360,7 @@ namespace OpenBve {
 			/// <summary>Called to update the brake notch. This invokes a call to SetBrake only if a change actually occured.</summary>
 			internal void UpdateBrake() {
 				int brakeNotch;
-				if (this.Train.Handles.Brake is TrainManager.AirBrakeHandle) {
+				if (this.Train.Handles.Brake is AirBrakeHandle) {
 					if (this.Train.Handles.HasHoldBrake) {
 						brakeNotch = this.Train.Handles.EmergencyBrake.Driver ? 4 : this.Train.Handles.Brake.Driver == (int)AirBrakeHandleState.Service ? 3 : this.Train.Handles.Brake.Driver == (int)AirBrakeHandleState.Lap ? 2 : this.Train.Handles.HoldBrake.Driver ? 1 : 0;
 					} else {

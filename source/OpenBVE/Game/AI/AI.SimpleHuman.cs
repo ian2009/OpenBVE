@@ -188,7 +188,7 @@ namespace OpenBve
 					{
 						CurrentInterval = 1.0;
 						Train.ApplyNotch(-1, true, 0, true);
-						if (Train.Handles.Brake is TrainManager.AirBrakeHandle)
+						if (Train.Handles.Brake is AirBrakeHandle)
 						{
 							if (Train.Cars[Train.DriverCar].CarBrake.brakeCylinder.CurrentPressure < 0.3 * Train.Cars[Train.DriverCar].CarBrake.brakeCylinder.ServiceMaximumPressure)
 							{
@@ -339,7 +339,7 @@ namespace OpenBve
 							break;
 						}
 					}
-					if (Train.Handles.Brake is TrainManager.AirBrakeHandle | Train.Handles.Brake.MaximumNotch <= 0)
+					if (Train.Handles.Brake is AirBrakeHandle | Train.Handles.Brake.MaximumNotch <= 0)
 					{
 						decelerationCruise = 0.3 * BrakeDeceleration;
 						decelerationStart = 0.5 * BrakeDeceleration;
@@ -750,7 +750,7 @@ namespace OpenBve
 						{
 							Train.ApplyHoldBrake(Train.Handles.HasHoldBrake);
 						}
-						if (Train.Handles.Brake is TrainManager.AirBrakeHandle)
+						if (Train.Handles.Brake is AirBrakeHandle)
 						{
 							CurrentInterval = 0.1;
 						}

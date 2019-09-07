@@ -843,7 +843,7 @@ namespace OpenBve {
 
 			if (trainBrakeType == BrakeSystemType.AutomaticAirBrake)
 			{
-				Train.Handles.Brake = new TrainManager.AirBrakeHandle();
+				Train.Handles.Brake = new AirBrakeHandle();
 			}
 			else
 			{

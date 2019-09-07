@@ -129,10 +129,6 @@ namespace OpenBve {
 		}
 
 		// train
-		internal struct HandleChange {
-			internal int Value;
-			internal double Time;
-		}
 		internal struct PowerHandle {
 			internal int Driver;
 			internal int Safety;

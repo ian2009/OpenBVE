@@ -1,6 +1,7 @@
 using System;
 using static LibRender.CameraProperties;
 using OpenBve.RouteManager;
+using OpenBve.TrainManagement;
 using OpenBveApi.FunctionScripting;
 using OpenBveApi.Math;
 using OpenBveApi.Runtime;
@@ -856,7 +857,7 @@ namespace OpenBve {
 						s++; break;
 					case Instructions.BrakeNotches:
 						if (Train != null) {
-							if (Train.Handles.Brake is TrainManager.AirBrakeHandle) {
+							if (Train.Handles.Brake is AirBrakeHandle) {
 								Function.Stack[s] = 2.0;
 							} else {
 								Function.Stack[s] = (double)Train.Handles.Brake.MaximumNotch;
@@ -867,7 +868,7 @@ namespace OpenBve {
 						s++; break;
 					case Instructions.BrakeNotchLinear:
 						if (Train != null) {
-							if (Train.Handles.Brake is TrainManager.AirBrakeHandle) {
+							if (Train.Handles.Brake is AirBrakeHandle) {
 								if (Train.Handles.EmergencyBrake.Driver) {
 									Function.Stack[s] = 3.0;
 								} else {
@@ -894,7 +895,7 @@ namespace OpenBve {
 						s++; break;
 					case Instructions.BrakeNotchesLinear:
 						if (Train != null) {
-							if (Train.Handles.Brake is TrainManager.AirBrakeHandle) {
+							if (Train.Handles.Brake is AirBrakeHandle) {
 								Function.Stack[s] = 3.0;
 							} else if (Train.Handles.HasHoldBrake) {
 								Function.Stack[s] = Train.Handles.Brake.MaximumNotch + 2.0;
@@ -971,7 +972,7 @@ namespace OpenBve {
 						s++; break;
 					case Instructions.HasAirBrake:
 						if (Train != null) {
-							Function.Stack[s] = Train.Handles.Brake is TrainManager.AirBrakeHandle ? 1.0 : 0.0;
+							Function.Stack[s] = Train.Handles.Brake is AirBrakeHandle ? 1.0 : 0.0;
 						} else {
 							Function.Stack[s] = 0.0;
 						}

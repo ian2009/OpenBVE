@@ -9,6 +9,7 @@ using OpenBveApi.Textures;
 using OpenBveApi.Interface;
 using OpenBveApi.FunctionScripting;
 using static LibRender.CameraProperties;
+using OpenBve.TrainManagement;
 
 namespace OpenBve {
 	internal static class PanelCfgParser {
@@ -1127,7 +1128,7 @@ namespace OpenBve {
 													CreateElement(Train, CornerX, CornerY + SemiHeight, (double)Width, (double)h, FullWidth, FullHeight, WorldLeft, WorldTop, WorldWidth, WorldHeight, WorldZ + EyeDistance - StackDistance, Train.Cars[Train.DriverCar].Driver, t, Color32.White, true);
 												}
 											}
-											if (Train.Handles.Brake is TrainManager.AirBrakeHandle) {
+											if (Train.Handles.Brake is AirBrakeHandle) {
 												int maxpow = Train.Handles.Power.MaximumNotch;
 												int em = maxpow + 3;
 												Train.Cars[Train.DriverCar].CarSections[0].Groups[0].Elements[k].StateFunction = new FunctionScript(Program.CurrentHost, "emergencyBrake " + em.ToString(Culture) + " brakeNotch 0 > " + maxpow.ToString(Culture) + " BrakeNotch + " + maxpow.ToString(Culture) + " powerNotch - ? ?", false);

@@ -126,7 +126,7 @@ namespace OpenBve
 					{
 						return;
 					}
-					if (TrainManager.PlayerTrain.Handles.Brake is TrainManager.AirBrakeHandle)
+					if (TrainManager.PlayerTrain.Handles.Brake is AirBrakeHandle)
 					{
 						if (TrainManager.PlayerTrain.Handles.EmergencyBrake.Driver)
 						{
