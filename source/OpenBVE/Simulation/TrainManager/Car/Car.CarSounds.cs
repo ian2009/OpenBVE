@@ -1,4 +1,5 @@
-﻿using SoundManager;
+﻿using OpenBve.TrainManagement;
+using SoundManager;
 
 namespace OpenBve
 {
@@ -8,7 +9,7 @@ namespace OpenBve
 		/// <summary>The set of sounds attached to a car</summary>
 		internal struct CarSounds
 		{
-			internal MotorSound Motor;
+			internal BveMotorSound Motor;
 			
 			internal CarSound Brake;
 			internal CarSound BreakerResume;

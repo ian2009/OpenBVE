@@ -72,6 +72,9 @@
     <Compile Include="Handles\Handles.Reverser.cs" />
     <Compile Include="Handles\Handles.Reverser.Positions.cs" />
     <Compile Include="Motor\Acceleration\AccelerationCurves.cs" />
+    <Compile Include="Motor\Sounds\BveMotorSound.cs" />
+    <Compile Include="Motor\Sounds\MotorSoundTable.cs" />
+    <Compile Include="Motor\Sounds\MotorSoundTableEntry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

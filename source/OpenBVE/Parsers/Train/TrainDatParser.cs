@@ -134,9 +134,9 @@ namespace OpenBve {
 			Train.Handles.HasLocoBrake = false;
 			double[] powerDelayUp = { }, powerDelayDown = { }, brakeDelayUp = { }, brakeDelayDown = { }, locoBrakeDelayUp = { }, locoBrakeDelayDown = { };
 			int powerNotches = 0, brakeNotches = 0, locoBrakeNotches = 0, powerReduceSteps = -1, locoBrakeType = 0, driverPowerNotches = 0, driverBrakeNotches = 0;
-			TrainManager.MotorSoundTable[] Tables = new TrainManager.MotorSoundTable[4];
+			MotorSoundTable[] Tables = new MotorSoundTable[4];
 			for (int i = 0; i < 4; i++) {
-				Tables[i].Entries = new TrainManager.MotorSoundTableEntry[16];
+				Tables[i].Entries = new MotorSoundTableEntry[16];
 				for (int j = 0; j < 16; j++) {
 					Tables[i].Entries[j].SoundIndex = -1;
 					Tables[i].Entries[j].Pitch = 1.0f;
@@ -750,15 +750,15 @@ namespace OpenBve {
 						{
 							int msi = 0;
 							switch (Lines[i].ToLowerInvariant()) {
-									case "#motor_p1": msi = TrainManager.MotorSound.MotorP1; break;
-									case "#motor_p2": msi = TrainManager.MotorSound.MotorP2; break;
-									case "#motor_b1": msi = TrainManager.MotorSound.MotorB1; break;
-									case "#motor_b2": msi = TrainManager.MotorSound.MotorB2; break;
+									case "#motor_p1": msi = BveMotorSound.MotorP1; break;
+									case "#motor_p2": msi = BveMotorSound.MotorP2; break;
+									case "#motor_b1": msi = BveMotorSound.MotorB1; break;
+									case "#motor_b2": msi = BveMotorSound.MotorB2; break;
 							} i++;
 							while (i < Lines.Length && !Lines[i].StartsWith("#", StringComparison.Ordinal)) {
 								int u = Tables[msi].Entries.Length;
 								if (n >= u) {
-									Array.Resize<TrainManager.MotorSoundTableEntry>(ref Tables[msi].Entries, 2 * u);
+									Array.Resize(ref Tables[msi].Entries, 2 * u);
 									for (int j = u; j < 2 * u; j++) {
 										Tables[msi].Entries[j].SoundIndex = -1;
 										Tables[msi].Entries[j].Pitch = 1.0f;
@@ -796,7 +796,7 @@ namespace OpenBve {
 								 * Handle duplicated section header:
 								 * If no entries, don't resize
 								 */
-								Array.Resize<TrainManager.MotorSoundTableEntry>(ref Tables[msi].Entries, n);
+								Array.Resize(ref Tables[msi].Entries, n);
 							}
 							i--;
 						} break;
@@ -1243,9 +1243,9 @@ namespace OpenBve {
 					}
 					// motor sound
 					Train.Cars[i].Sounds.Motor.SpeedConversionFactor = 18.0;
-					Train.Cars[i].Sounds.Motor.Tables = new TrainManager.MotorSoundTable[4];
+					Train.Cars[i].Sounds.Motor.Tables = new MotorSoundTable[4];
 					for (int j = 0; j < 4; j++) {
-						Train.Cars[i].Sounds.Motor.Tables[j].Entries = new TrainManager.MotorSoundTableEntry[Tables[j].Entries.Length];
+						Train.Cars[i].Sounds.Motor.Tables[j].Entries = new MotorSoundTableEntry[Tables[j].Entries.Length];
 						for (int k = 0; k < Tables[j].Entries.Length; k++) {
 							Train.Cars[i].Sounds.Motor.Tables[j].Entries[k] = Tables[j].Entries[k];
 						}
@@ -1257,9 +1257,9 @@ namespace OpenBve {
 					Train.Cars[i].Specs.AccelerationCurves = new AccelerationCurve[] { };
 					Train.Cars[i].Specs.AccelerationCurveMaximum = 0.0;
 					Train.Cars[i].Sounds.Motor.SpeedConversionFactor = 18.0;
-					Train.Cars[i].Sounds.Motor.Tables = new TrainManager.MotorSoundTable[4];
+					Train.Cars[i].Sounds.Motor.Tables = new MotorSoundTable[4];
 					for (int j = 0; j < 4; j++) {
-						Train.Cars[i].Sounds.Motor.Tables[j].Entries = new TrainManager.MotorSoundTableEntry[] { };
+						Train.Cars[i].Sounds.Motor.Tables[j].Entries = new MotorSoundTableEntry[] { };
 					}
 				}
 			}

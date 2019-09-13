@@ -1,4 +1,4 @@
-﻿// ╔═════════════════════════════════════════════════════════════╗
+// ╔═════════════════════════════════════════════════════════════╗
 // ║ TrainManager.cs for the Route Viewer                        ║
 // ╠═════════════════════════════════════════════════════════════╣
 // ║ This file cannot be used in the openBVE main program.       ║
@@ -89,29 +89,9 @@ namespace OpenBve {
 			internal CarSound Sound;
 			internal bool Loop;
 		}
-		
-		internal struct MotorSoundTableEntry {
-			internal int SoundBufferIndex;
-			internal float Pitch;
-			internal float Gain;
-		}
-		internal struct MotorSoundTable {
-			internal MotorSoundTableEntry[] Entries;
-			internal int SoundBufferIndex;
-			internal int SoundSourceIndex;
-		}
-		internal struct MotorSound {
-			internal MotorSoundTable[] Tables;
-			internal Vector3 Position;
-			internal double SpeedConversionFactor;
-			internal int SpeedDirection;
-			internal const int MotorP1 = 0;
-			internal const int MotorP2 = 1;
-			internal const int MotorB1 = 2;
-			internal const int MotorB2 = 3;
-		}
+
 		internal struct CarSounds {
-			internal MotorSound Motor;
+			internal BveMotorSound Motor;
 			internal CarSound Adjust;
 			internal CarSound Air;
 			internal CarSound AirHigh;

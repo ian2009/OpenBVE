@@ -16,7 +16,7 @@ namespace OpenBve.Parsers.Train
 		private static string currentPath;
 		private static bool[] CarObjectsReversed;
 		private static bool[] BogieObjectsReversed;
-		private static TrainManager.BveAccelerationCurve[] AccelerationCurves;
+		private static BveAccelerationCurve[] AccelerationCurves;
 		internal static void Parse(string fileName, TrainManager.Train Train, ref UnifiedObject[] CarObjects, ref UnifiedObject[] BogieObjects, ref UnifiedObject[] CouplerObjects)
 		{
 			//The current XML file to load
