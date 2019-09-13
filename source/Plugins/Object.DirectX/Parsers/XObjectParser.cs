@@ -34,7 +34,7 @@ namespace Plugin {
 			} else if (Data[8] == 116 & Data[9] == 122 & Data[10] == 105 & Data[11] == 112) {
 				// compressed textual flavor
 				try {
-					byte[] Uncompressed = Decompress(Data);
+					byte[] Uncompressed = MSZip.Decompress(Data);
 					string Text = Encoding.GetString(Uncompressed);
 					return LoadTextualX(FileName, Text, Encoding);
 				} catch (Exception ex) {
@@ -45,7 +45,7 @@ namespace Plugin {
 				// compressed binary flavor
 
 				try {
-					byte[] Uncompressed = Decompress(Data);
+					byte[] Uncompressed = MSZip.Decompress(Data);
 					return LoadBinaryX(FileName, Uncompressed, 0, FloatingPointSize);
 				} catch (Exception ex) {
 					Plugin.currentHost.AddMessage(MessageType.Error, false, "An unexpected error occured (" + ex.Message + ") while attempting to decompress the binary X object file encountered in " + FileName);
@@ -58,33 +58,7 @@ namespace Plugin {
 			}
 		}
 
-		// ================================
-
-		// decompress
-		private static byte[] Decompress(byte[] Data) {
-			byte[] Target;
-			using (MemoryStream InputStream = new MemoryStream(Data)) {
-				InputStream.Position = 26;
-				using (DeflateStream Deflate = new DeflateStream(InputStream, CompressionMode.Decompress, true)) {
-					using (MemoryStream OutputStream = new MemoryStream()) {
-						byte[] Buffer = new byte[4096];
-						while (true) {
-							int Count = Deflate.Read(Buffer, 0, Buffer.Length);
-							if (Count != 0) {
-								OutputStream.Write(Buffer, 0, Count);
-							}
-							if (Count != Buffer.Length) {
-								break;
-							}
-						}
-						Target = new byte[OutputStream.Length];
-						OutputStream.Position = 0;
-						OutputStream.Read(Target, 0, Target.Length);
-					}
-				}
-			}
-			return Target;
-		}
+		
 
 		// ================================
 
@@ -164,7 +138,7 @@ namespace Plugin {
 				return Templates[0];
 			}
 			//Not a default template, so now figure out if it's a named texture
-			string[] splitName = Name.Split(new char[] {' '});
+			string[] splitName = Name.Split(new char[] { });
 			if (splitName[0].ToLowerInvariant() == "material")
 			{
 				AlternateStructure = true;
@@ -198,7 +172,7 @@ namespace Plugin {
 					}
 				}
 				//Convert runs of whitespace to single
-				var list = Lines[i].Split(new char[] {' '}).Where(s => !string.IsNullOrWhiteSpace(s));
+				var list = Lines[i].Split(new char[] { }).Where(s => !string.IsNullOrWhiteSpace(s));
 				Lines[i] = string.Join(" ", list);
 			}
 			
@@ -206,7 +180,7 @@ namespace Plugin {
 			for (int i = 0; i < Lines.Length; i++)
 			{
 				string[] splitLine = Lines[i].Split(new char[] { ',' });
-				if (splitLine.Length == 2 && splitLine[1].Trim(new char[] {' '}).Length > 0)
+				if (splitLine.Length == 2 && splitLine[1].Trim(new char[] { }).Length > 0)
 				{
 					if (!splitLine[1].EndsWith(";"))
 					{
@@ -353,7 +327,7 @@ namespace Plugin {
 							} else if (Content[Position] == ',' | Content[Position] == ';') {
 								i = Position + 1;
 							} else if (Content[Position] == '{') {
-								string s = Content.Substring(i, Position - i).Trim(new char[] {' '});
+								string s = Content.Substring(i, Position - i).Trim(new char[] { });
 								Structure o;
 								Position++;
 								if (!ReadTextualTemplate(FileName, Content, ref Position, GetTemplate(s, false), false, out o)) {
@@ -375,7 +349,7 @@ namespace Plugin {
 							if (Content[Position] == '"') {
 								q = true;
 							} else if (Content[Position] == '{') {
-								string s = Content.Substring(i, Position - i).Trim(new char[] {' '});
+								string s = Content.Substring(i, Position - i).Trim(new char[] { });
 								Structure o;
 								Position++;
 								if (!ReadTextualTemplate(FileName, Content, ref Position, GetTemplate(s, false), false, out o)) {
@@ -613,7 +587,7 @@ namespace Plugin {
 									Plugin.currentHost.AddMessage(MessageType.Error, false, "Invalid character encountered while processing a DWORD in template " + Template.Name + " in textual X object file " + FileName);
 									return false;
 								} else if (Content[Position] == ';') {
-									string s = Content.Substring(i, Position - i).Trim(new char[] {' '});
+									string s = Content.Substring(i, Position - i).Trim(new char[] { });
 									int a; if (!int.TryParse(s, System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out a)) {
 										Plugin.currentHost.AddMessage(MessageType.Error, false, "DWORD could not be parsed in template " + Template.Name + " in textual X object file " + FileName);
 										return false;
@@ -631,7 +605,7 @@ namespace Plugin {
 									Plugin.currentHost.AddMessage(MessageType.Error, false, "Invalid character encountered while processing a DWORD in template " + Template.Name + " in textual X object file " + FileName);
 									return false;
 								} else if (Content[Position] == ';' || Content[Position] == ',') {
-									string s = Content.Substring(i, Position - i).Trim(new char[] {' '});
+									string s = Content.Substring(i, Position - i).Trim(new char[] { });
 									double a; if (!double.TryParse(s, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out a)) {
 										if (s != string.Empty)
 										{
@@ -742,8 +716,8 @@ namespace Plugin {
 							{
 
 
-								t = Content.Substring(i, Position - i).Trim(new char[] {' '});
-								if (IsTemplate(t.Split(new char[] {' '})[0]) || t.Length == 0)
+								t = Content.Substring(i, Position - i).Trim(new char[] { });
+								if (IsTemplate(t.Split(new char[] { })[0]) || t.Length == 0)
 								{
 									//HACK: Check if the found string starts with a template name to determine whether we should discard it
 									SF = false;

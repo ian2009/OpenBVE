@@ -29,11 +29,11 @@ namespace OpenBve {
 			string FileName = OpenBveApi.Path.CombineFile(TrainPath, "panel.cfg");
 			string[] Lines = System.IO.File.ReadAllLines(FileName, Encoding);
 			for (int i = 0; i < Lines.Length; i++) {
-				Lines[i] = Lines[i].Trim(new char[] {' '});
+				Lines[i] = Lines[i].Trim(new char[] { });
 				int j = Lines[i].IndexOf(';');
 				if (j >= 0)
 				{
-					Lines[i] = Lines[i].Substring(0, j).TrimEnd(new char[] {' '});
+					Lines[i] = Lines[i].Substring(0, j).TrimEnd(new char[] { });
 				}
 			}
 			// initialize
@@ -60,7 +60,7 @@ namespace OpenBve {
 			for (int i = 0; i < Lines.Length; i++) {
 				if (Lines[i].Length > 0) {
 					if (Lines[i].StartsWith("[", StringComparison.Ordinal) & Lines[i].EndsWith("]", StringComparison.Ordinal)) {
-						string Section = Lines[i].Substring(1, Lines[i].Length - 2).Trim(new char[] {' '});
+						string Section = Lines[i].Substring(1, Lines[i].Length - 2).Trim(new char[] { });
 						switch (Section.ToLowerInvariant()) {
 								// panel
 							case "panel":
@@ -68,8 +68,8 @@ namespace OpenBve {
 									int j = Lines[i].IndexOf('=');
 									if (j >= 0)
 									{
-										string Key = Lines[i].Substring(0, j).TrimEnd(new char[] {' '});
-										string Value = Lines[i].Substring(j + 1).TrimStart(new char[] {' '});
+										string Key = Lines[i].Substring(0, j).TrimEnd(new char[] { });
+										string Value = Lines[i].Substring(j + 1).TrimStart(new char[] { });
 										switch (Key.ToLowerInvariant()) {
 											case "background":
 												if (Path.ContainsInvalidChars(Value)) {
@@ -91,8 +91,8 @@ namespace OpenBve {
 									int j = Lines[i].IndexOf('=');
 									if (j >= 0)
 									{
-										string Key = Lines[i].Substring(0, j).TrimEnd(new char[] {' '});
-										string Value = Lines[i].Substring(j + 1).TrimStart(new char[] {' '});
+										string Key = Lines[i].Substring(0, j).TrimEnd(new char[] { });
+										string Value = Lines[i].Substring(j + 1).TrimStart(new char[] { });
 										switch (Key.ToLowerInvariant()) {
 											case "yaw":
 												{
@@ -148,7 +148,7 @@ namespace OpenBve {
 				}
 				if (Lines[i].Length != 0) {
 					if (Lines[i].StartsWith("[", StringComparison.Ordinal) & Lines[i].EndsWith("]", StringComparison.Ordinal)) {
-						string Section = Lines[i].Substring(1, Lines[i].Length - 2).Trim(new char[] {' '});
+						string Section = Lines[i].Substring(1, Lines[i].Length - 2).Trim(new char[] { });
 						switch (Section.ToLowerInvariant()) {
 								// pressuregauge
 							case "pressuregauge":
@@ -166,8 +166,8 @@ namespace OpenBve {
 									i++; while (i < Lines.Length && !(Lines[i].StartsWith("[", StringComparison.Ordinal) & Lines[i].EndsWith("]", StringComparison.Ordinal))) {
 										int j = Lines[i].IndexOf('='); if (j >= 0)
 										{
-											string Key = Lines[i].Substring(0, j).TrimEnd(new char[] {' '});
-											string Value = Lines[i].Substring(j + 1).TrimStart(new char[] {' '});
+											string Key = Lines[i].Substring(0, j).TrimEnd(new char[] { });
+											string Value = Lines[i].Substring(j + 1).TrimStart(new char[] { });
 											string[] Arguments = GetArguments(Value);
 											switch (Key.ToLowerInvariant()) {
 												case "type":
@@ -458,8 +458,8 @@ namespace OpenBve {
 									i++; while (i < Lines.Length && !(Lines[i].StartsWith("[", StringComparison.Ordinal) & Lines[i].EndsWith("]", StringComparison.Ordinal))) {
 										int j = Lines[i].IndexOf('='); if (j >= 0)
 										{
-											string Key = Lines[i].Substring(0, j).TrimEnd(new char[] {' '});
-											string Value = Lines[i].Substring(j + 1).TrimStart(new char[] {' '});
+											string Key = Lines[i].Substring(0, j).TrimEnd(new char[] { });
+											string Value = Lines[i].Substring(j + 1).TrimStart(new char[] { });
 											string[] Arguments = GetArguments(Value);
 											switch (Key.ToLowerInvariant()) {
 												case "type":
@@ -714,8 +714,8 @@ namespace OpenBve {
 									i++; while (i < Lines.Length && !(Lines[i].StartsWith("[", StringComparison.Ordinal) & Lines[i].EndsWith("]", StringComparison.Ordinal))) {
 										int j = Lines[i].IndexOf('='); if (j >= 0)
 										{
-											string Key = Lines[i].Substring(0, j).TrimEnd(new char[] {' '});
-											string Value = Lines[i].Substring(j + 1).TrimStart(new char[] {' '});
+											string Key = Lines[i].Substring(0, j).TrimEnd(new char[] { });
+											string Value = Lines[i].Substring(j + 1).TrimStart(new char[] { });
 											string[] Arguments = GetArguments(Value);
 											switch (Key.ToLowerInvariant()) {
 												case "number":
@@ -861,8 +861,8 @@ namespace OpenBve {
 									i++; while (i < Lines.Length && !(Lines[i].StartsWith("[", StringComparison.Ordinal) & Lines[i].EndsWith("]", StringComparison.Ordinal))) {
 										int j = Lines[i].IndexOf('='); if (j >= 0)
 										{
-											string Key = Lines[i].Substring(0, j).TrimEnd(new char[] {' '});
-											string Value = Lines[i].Substring(j + 1).TrimStart(new char[] {' '});
+											string Key = Lines[i].Substring(0, j).TrimEnd(new char[] { });
+											string Value = Lines[i].Substring(j + 1).TrimStart(new char[] { });
 											string[] Arguments = GetArguments(Value);
 											switch (Key.ToLowerInvariant()) {
 												case "turnon":
@@ -931,8 +931,8 @@ namespace OpenBve {
 									i++; while (i < Lines.Length && !(Lines[i].StartsWith("[", StringComparison.Ordinal) & Lines[i].EndsWith("]", StringComparison.Ordinal))) {
 										int j = Lines[i].IndexOf('='); if (j >= 0)
 										{
-											string Key = Lines[i].Substring(0, j).TrimEnd(new char[] {' '});
-											string Value = Lines[i].Substring(j + 1).TrimStart(new char[] {' '});
+											string Key = Lines[i].Substring(0, j).TrimEnd(new char[] { });
+											string Value = Lines[i].Substring(j + 1).TrimStart(new char[] { });
 											string[] Arguments = GetArguments(Value);
 											switch (Key.ToLowerInvariant()) {
 												case "background":
@@ -1068,8 +1068,8 @@ namespace OpenBve {
 									i++; while (i < Lines.Length && !(Lines[i].StartsWith("[", StringComparison.Ordinal) & Lines[i].EndsWith("]", StringComparison.Ordinal))) {
 										int j = Lines[i].IndexOf('='); if (j >= 0)
 										{
-											string Key = Lines[i].Substring(0, j).TrimEnd(new char[] {' '});
-											string Value = Lines[i].Substring(j + 1).TrimStart(new char[] {' '});
+											string Key = Lines[i].Substring(0, j).TrimEnd(new char[] { });
+											string Value = Lines[i].Substring(j + 1).TrimStart(new char[] { });
 											string[] Arguments = GetArguments(Value);
 											switch (Key.ToLowerInvariant()) {
 												case "image":
@@ -1161,16 +1161,16 @@ namespace OpenBve {
 			for (int i = 0; i < Expression.Length; i++) {
 				if (Expression[i] == ',' | Expression[i] == ':') {
 					if (UsedArguments >= Arguments.Length) Array.Resize<string>(ref Arguments, Arguments.Length << 1);
-					Arguments[UsedArguments] = Expression.Substring(Start, i - Start).TrimStart(new char[] {' '});
+					Arguments[UsedArguments] = Expression.Substring(Start, i - Start).TrimStart(new char[] { });
 					UsedArguments++; Start = i + 1;
 				} else if (Expression[i] == ';') {
 					if (UsedArguments >= Arguments.Length) Array.Resize<string>(ref Arguments, Arguments.Length << 1);
-					Arguments[UsedArguments] = Expression.Substring(Start, i - Start).TrimStart(new char[] {' '});
+					Arguments[UsedArguments] = Expression.Substring(Start, i - Start).TrimStart(new char[] { });
 					UsedArguments++; Start = Expression.Length; break;
 				}
 			} if (Start < Expression.Length) {
 				if (UsedArguments >= Arguments.Length) Array.Resize<string>(ref Arguments, Arguments.Length << 1);
-				Arguments[UsedArguments] = Expression.Substring(Start).Trim(new char[] {' '});
+				Arguments[UsedArguments] = Expression.Substring(Start).Trim(new char[] { });
 				UsedArguments++;
 			}
 			Array.Resize<string>(ref Arguments, UsedArguments);

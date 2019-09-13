@@ -32,7 +32,7 @@ namespace Plugin
 			{
 				int j = Lines[i].IndexOf(';');
 				//Trim out comments
-				Lines[i] = j >= 0 ? Lines[i].Substring(0, j).Trim(new char[] {' '}) : Lines[i].Trim(new char[] {' '});
+				Lines[i] = j >= 0 ? Lines[i].Substring(0, j).Trim(new char[] { }) : Lines[i].Trim(new char[] { });
 				//Test whether RPN functions have been used
 				rpnUsed = Lines[i].IndexOf("functionrpn", StringComparison.OrdinalIgnoreCase) >= 0;
 			}
@@ -59,8 +59,8 @@ namespace Plugin
 										int j = Lines[i].IndexOf("=", StringComparison.Ordinal);
 										if (j > 0)
 										{
-											string a = Lines[i].Substring(0, j).TrimEnd(new char[] {' '});
-											string b = Lines[i].Substring(j + 1).TrimStart(new char[] {' '});
+											string a = Lines[i].Substring(0, j).TrimEnd(new char[] { });
+											string b = Lines[i].Substring(j + 1).TrimStart(new char[] { });
 											switch (a.ToLowerInvariant())
 											{
 												case "position":
@@ -207,8 +207,8 @@ namespace Plugin
 										int j = Lines[i].IndexOf("=", StringComparison.Ordinal);
 										if (j > 0)
 										{
-											string a = Lines[i].Substring(0, j).TrimEnd(new char[] {' '});
-											string b = Lines[i].Substring(j + 1).TrimStart(new char[] {' '});
+											string a = Lines[i].Substring(0, j).TrimEnd(new char[] { });
+											string b = Lines[i].Substring(j + 1).TrimStart(new char[] { });
 											switch (a.ToLowerInvariant())
 											{
 												case "position":
@@ -249,7 +249,7 @@ namespace Plugin
 															bool NullObject = true;
 															for (int k = 0; k < s.Length; k++)
 															{
-																s[k] = s[k].Trim(new char[] {' '});
+																s[k] = s[k].Trim(new char[] { });
 																if (s[k].Length == 0)
 																{
 																	currentHost.AddMessage(MessageType.Error, false, "File" + k.ToString(Culture) + " is an empty string - did you mean something else? - in " + a + " at line " + (i + 1).ToString(Culture) + " in file " + FileName);
@@ -287,21 +287,14 @@ namespace Plugin
 														}
 													} break;
 												case "statefunction":
-													try
-													{
-														StateFunctionLine = i;
-														StateFunctionRpn = b;
-													}
-													catch (Exception ex)
-													{
-														currentHost.AddMessage(MessageType.Error, false, ex.Message + " in " + a + " at line " + (i + 1).ToString(Culture) + " in file " + FileName);
-													} break;
+													StateFunctionLine = i;
+													StateFunctionRpn = b;
+													break;
 												case "statefunctionrpn":
-													{
-														StateFunctionLine = i;
-														StateFunctionRpn = b;
-														StateFunctionIsPostfix = true;
-													} break;
+													StateFunctionLine = i;
+													StateFunctionRpn = b;
+													StateFunctionIsPostfix = true;
+													break;
 												case "translatexdirection":
 												case "translateydirection":
 												case "translatezdirection":
@@ -436,8 +429,14 @@ namespace Plugin
 														double FrontAxlePosition;
 														double RearAxlePosition;
 														var splitValue = b.Split(new char[] { ',' });
-														Double.TryParse(splitValue[0], out FrontAxlePosition);
-														Double.TryParse(splitValue[1], out RearAxlePosition);
+														if (!double.TryParse(splitValue[0], out FrontAxlePosition))
+														{
+															currentHost.AddMessage(MessageType.Error, false,"Invalid FrontAxlePosition in " + a + " at line " + (i + 1).ToString(Culture) + " in file " +FileName);
+														}
+														if(!double.TryParse(splitValue[1], out RearAxlePosition))
+														{
+															currentHost.AddMessage(MessageType.Error, false,"Invalid RearAxlePosition in " + a + " at line " + (i + 1).ToString(Culture) + " in file " +FileName);
+														}
 														if (FrontAxlePosition > RearAxlePosition)
 														{
 															Result.Objects[ObjectCount].FrontAxlePosition = FrontAxlePosition;
@@ -934,8 +933,8 @@ namespace Plugin
 										int j = Lines[i].IndexOf("=", StringComparison.Ordinal);
 										if (j > 0)
 										{
-											string a = Lines[i].Substring(0, j).TrimEnd(new char[] {' '});
-											string b = Lines[i].Substring(j + 1).TrimStart(new char[] {' '});
+											string a = Lines[i].Substring(0, j).TrimEnd(new char[] { });
+											string b = Lines[i].Substring(j + 1).TrimStart(new char[] { });
 											switch (a.ToLowerInvariant())
 											{
 												case "position":
@@ -1214,8 +1213,8 @@ namespace Plugin
 										int j = Lines[i].IndexOf("=", StringComparison.Ordinal);
 										if (j > 0)
 										{
-											string a = Lines[i].Substring(0, j).TrimEnd(new char[] {' '});
-											string b = Lines[i].Substring(j + 1).TrimStart(new char[] {' '});
+											string a = Lines[i].Substring(0, j).TrimEnd(new char[] { });
+											string b = Lines[i].Substring(j + 1).TrimStart(new char[] { });
 											switch (a.ToLowerInvariant())
 											{
 												case "position":
@@ -1270,11 +1269,11 @@ namespace Plugin
 														fileNames = new string[splitFiles.Length];
 														for (int k = 0; k < splitFiles.Length; k++)
 														{
-															if (splitFiles[k].Trim(new char[] {' '}).Length == 0)
+															if (splitFiles[k].Trim(new char[] { }).Length == 0)
 															{
 																continue;
 															}
-															fileNames[k] = OpenBveApi.Path.CombineFile(Folder, splitFiles[k].Trim(new char[] {' '}));
+															fileNames[k] = OpenBveApi.Path.CombineFile(Folder, splitFiles[k].Trim(new char[] { }));
 															if (!System.IO.File.Exists(fileNames[k]))
 															{
 																fileNames[k] = OpenBveApi.Path.CombineFile(currentSoundFolder, b);

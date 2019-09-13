@@ -16,8 +16,8 @@ namespace OpenBve.Parsers.Train
 		private static string currentPath;
 		private static bool[] CarObjectsReversed;
 		private static bool[] BogieObjectsReversed;
-		private static BveAccelerationCurve[] AccelerationCurves;
-		internal static void Parse(string fileName, TrainManager.Train Train, ref UnifiedObject[] CarObjects, ref UnifiedObject[] BogieObjects)
+		private static TrainManager.BveAccelerationCurve[] AccelerationCurves;
+		internal static void Parse(string fileName, TrainManager.Train Train, ref UnifiedObject[] CarObjects, ref UnifiedObject[] BogieObjects, ref UnifiedObject[] CouplerObjects)
 		{
 			//The current XML file to load
 			XmlDocument currentXML = new XmlDocument();
@@ -68,7 +68,7 @@ namespace OpenBve.Parsers.Train
 						}
 						else
 						{
-							if (carIndex - 1 > Train.Couplers.Length - 1)
+							if (carIndex - 1 > Train.Cars.Length - 2)
 							{
 								Interface.AddMessage(MessageType.Error, false, "Unexpected extra coupler encountered in XML file " + fileName);
 								continue;
@@ -78,15 +78,27 @@ namespace OpenBve.Parsers.Train
 								switch (c.Name.ToLowerInvariant())
 								{
 									case "minimum":
-										if (!NumberFormats.TryParseDoubleVb6(c.InnerText, out Train.Couplers[carIndex - 1].MinimumDistanceBetweenCars))
+										if (!NumberFormats.TryParseDoubleVb6(c.InnerText, out Train.Cars[carIndex - 1].Coupler.MinimumDistanceBetweenCars))
 										{
 											Interface.AddMessage(MessageType.Error, false, "MinimumDistanceBetweenCars is invalid for coupler " + carIndex + "in XML file " + fileName);
 										}
 										break;
 									case "maximum":
-										if (!NumberFormats.TryParseDoubleVb6(c.InnerText, out Train.Couplers[carIndex - 1].MaximumDistanceBetweenCars))
+										if (!NumberFormats.TryParseDoubleVb6(c.InnerText, out Train.Cars[carIndex - 1].Coupler.MaximumDistanceBetweenCars))
 										{
 											Interface.AddMessage(MessageType.Error, false, "MaximumDistanceBetweenCars is invalid for coupler " + carIndex + "in XML file " + fileName);
+										}
+										break;
+									case "object":
+										if (string.IsNullOrEmpty(c.InnerText))
+										{
+											Interface.AddMessage(MessageType.Warning, false, "Invalid object path for Coupler " + (carIndex - 1) + " in XML file " + fileName);
+											break;
+										}
+										string f = OpenBveApi.Path.CombineFile(currentPath, c.InnerText);
+										if (System.IO.File.Exists(f))
+										{
+											CouplerObjects[carIndex - 1] = ObjectManager.LoadObject(f, System.Text.Encoding.Default, false);
 										}
 										break;
 								}

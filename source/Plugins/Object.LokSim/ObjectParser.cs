@@ -207,44 +207,28 @@ namespace Plugin
 										if (childNode.Name == "Props" && childNode.Attributes != null)
 										{
 											//Vertex
-											double vx = 0.0, vy = 0.0, vz = 0.0;
+											Vector3 v = new Vector3();
+											bool vF = false;
 											//Normals
-											double nx = 0.0, ny = 0.0, nz = 0.0;
+											Vector3 n = new Vector3();
 											foreach (XmlAttribute attribute in childNode.Attributes)
 											{
 												switch (attribute.Name)
 												{
 													//Sets the vertex normals
 													case "Normal":
-														string[] NormalPoints = attribute.Value.Split(';');
-														if (!double.TryParse(NormalPoints[0], out nx))
+														if (!Vector3.TryParse(attribute.Value, ';', out n))
 														{
-															Plugin.currentHost.AddMessage(MessageType.Error, false, "Invalid argument nX in " + attribute.Name + " in Loksim3D object file " + FileName);
-														}
-														if (!double.TryParse(NormalPoints[1], out ny))
-														{
-															Plugin.currentHost.AddMessage(MessageType.Error, false, "Invalid argument nY in " + attribute.Name + " in Loksim3D object file " + FileName);
-														}
-														if (!double.TryParse(NormalPoints[2], out nz))
-														{
-															Plugin.currentHost.AddMessage(MessageType.Error, false, "Invalid argument nZ in " + attribute.Name + " in Loksim3D object file " + FileName);
+															Plugin.currentHost.AddMessage(MessageType.Warning, true, "Invalid vertex normal vector " + attribute.Value + " supplied in Ls3d object file.");
 														}
 														break;
 													//Sets the vertex 3D co-ordinates
 													case "Vekt":
-														string[] VertexPoints = attribute.Value.Split(';');
-														if (!double.TryParse(VertexPoints[0], out vx))
+														if (!Vector3.TryParse(attribute.Value, ';', out v))
 														{
-															Plugin.currentHost.AddMessage(MessageType.Error, false, "Invalid argument vX in " + attribute.Name + " in Loksim3D object file " + FileName);
+															Plugin.currentHost.AddMessage(MessageType.Warning, true, "Invalid vertex coordinate vector " + attribute.Value + " supplied in Ls3d object file.");
 														}
-														if (!double.TryParse(VertexPoints[1], out vy))
-														{
-															Plugin.currentHost.AddMessage(MessageType.Error, false, "Invalid argument yY in " + attribute.Name + " in Loksim3D object file " + FileName);
-														}
-														if (!double.TryParse(VertexPoints[2], out vz))
-														{
-															Plugin.currentHost.AddMessage(MessageType.Error, false, "Invalid argument vZ in " + attribute.Name + " in Loksim3D object file " + FileName);
-														}
+														vF = true;
 														break;
 												}
 											}
@@ -252,16 +236,21 @@ namespace Plugin
 											Array.Resize<VertexTemplate>(ref tempVertices, tempVertices.Length + 1);
 											Array.Resize<Vector3>(ref tempNormals, tempNormals.Length + 1);
 											//Add vertex and normals to temp array
-											tempVertices[tempVertices.Length - 1] = new Vertex(vx, vy, vz);
-											tempNormals[tempNormals.Length - 1] = new Vector3((float)nx, (float)ny, (float)nz);
+											if (vF == false)
+											{
+												Plugin.currentHost.AddMessage(MessageType.Warning, true, "Vertex with no co-ordinates supplied encountered in Ls3d object file.");
+												continue;
+											}
+											tempVertices[tempVertices.Length - 1] = new Vertex((Vector3)v);
+											tempNormals[tempNormals.Length - 1] = new Vector3(n);
 											tempNormals[tempNormals.Length - 1].Normalize();
 											Array.Resize<VertexTemplate>(ref Builder.Vertices, Builder.Vertices.Length + 1);
 											while (Builder.Vertices.Length >= Normals.Length)
 											{
 												Array.Resize<Vector3>(ref Normals, Normals.Length << 1);
 											}
-											Builder.Vertices[Builder.Vertices.Length - 1] = new Vertex(vx, vy, vz);
-											Normals[Builder.Vertices.Length - 1] = new Vector3((float)nx, (float)ny, (float)nz);
+											Builder.Vertices[Builder.Vertices.Length - 1] = new Vertex(new Vector3((Vector3)v));
+											Normals[Builder.Vertices.Length - 1] = new Vector3(n);
 										}
 									}
 								}
@@ -380,7 +369,7 @@ namespace Plugin
 				{
 					Rotation.Z = Rotation.Z.ToRadians();
 					//Apply rotation
-					ApplyRotation(Builder, Vector3.Right, Rotation.Z);
+					Builder.ApplyRotation(Vector3.Right, Rotation.Z);
 				}
 
 
@@ -389,14 +378,14 @@ namespace Plugin
 					//This is actually the Y-Axis rotation
 					Rotation.X = Rotation.X.ToRadians();
 					//Apply rotation
-					ApplyRotation(Builder, Vector3.Down, Rotation.X);
+					Builder.ApplyRotation(Vector3.Down, Rotation.X);
 				}
 				if (Rotation.Y != 0.0)
 				{
 					//This is actually the X-Axis rotation
 					Rotation.Y = Rotation.Y.ToRadians();
 					//Apply rotation
-					ApplyRotation(Builder, Vector3.Forward, Rotation.Y);
+					Builder.ApplyRotation(Vector3.Forward, Rotation.Y);
 				}
 
 
@@ -516,23 +505,6 @@ namespace Plugin
 			Alpha.UnlockBits(bmp2Data);
 			Output.UnlockBits(bmp3Data);
 			return Output;
-		}
-
-		private static void ApplyRotation(MeshBuilder Builder, Vector3 Rotation, double a)
-		{
-			double cosa = Math.Cos(a);
-			double sina = Math.Sin(a);
-			for (int i = 0; i < Builder.Vertices.Length; i++)
-			{
-				Builder.Vertices[i].Coordinates.Rotate(Rotation, cosa, sina);
-			}
-			for (int i = 0; i < Builder.Faces.Length; i++)
-			{
-				for (int j = 0; j < Builder.Faces[i].Vertices.Length; j++)
-				{
-					Builder.Faces[i].Vertices[j].Normal.Rotate(Rotation, cosa, sina);
-				}
-			}
 		}
 	}
 }
