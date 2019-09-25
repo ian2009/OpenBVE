@@ -328,11 +328,26 @@ namespace OpenBve
 			locks = new Queue<object>(10);
 			LibRender.Renderer.Initialize();
 			HUD.LoadHUD();
-			LoadingScreen.InitLoading(Program.FileSystem.GetDataFolder("In-game"), typeof(Renderer).Assembly.GetName().Version.ToString());
-			Renderer.UpdateViewport(ViewPortChangeMode.NoChange);
-			LibRender.MotionBlur.Initialize(Interface.CurrentOptions.MotionBlur);
-			Loading.LoadAsynchronously(MainLoop.currentResult.RouteFile, MainLoop.currentResult.RouteEncoding, MainLoop.currentResult.TrainFolder, MainLoop.currentResult.TrainEncoding);
-			LoadingScreenLoop();
+			if (string.IsNullOrEmpty(MainLoop.currentResult.RouteFile))
+			{
+				
+				Game.CurrentInterface = Game.InterfaceType.Menu;
+				Game.Menu.PushMenu(Menu.MenuType.GameStart);
+				Loading.Complete = true;
+				World.CameraTrackFollower = new TrackFollower(Program.CurrentHost);
+				loadComplete = true;
+			}
+			else
+			{
+
+
+				LoadingScreen.InitLoading(Program.FileSystem.GetDataFolder("In-game"), typeof(Renderer).Assembly.GetName().Version.ToString());
+				Renderer.UpdateViewport(ViewPortChangeMode.NoChange);
+				LibRender.MotionBlur.Initialize(Interface.CurrentOptions.MotionBlur);
+				Loading.LoadAsynchronously(MainLoop.currentResult.RouteFile, MainLoop.currentResult.RouteEncoding, MainLoop.currentResult.TrainFolder, MainLoop.currentResult.TrainEncoding);
+				LoadingScreenLoop();
+			}
+
 			//Add event handler hooks for keyboard and mouse buttons
 			//Do this after the renderer has init and the loop has started to prevent timing issues
 			KeyDown	+= MainLoop.keyDownEvent;
@@ -443,7 +458,6 @@ namespace OpenBve
 			{
 				Close();
 			}
-
 			lock (Illustrations.Locker)
 			{
 				Timetable.CreateTimetable();
