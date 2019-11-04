@@ -124,6 +124,12 @@ namespace OpenBveApi.Objects
 				}
 			}
 
+			/// <inheritdoc />
+			public override UnifiedObject CreateTransformedObject(double d0, double d1)
+			{
+				throw new NotSupportedException();
+			}
+
 			/// <inheritdoc/>
 			public override UnifiedObject Clone()
 			{

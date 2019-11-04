@@ -40,6 +40,11 @@ namespace OpenBveApi.Objects
 		/// <param name="VertexCulling">Whether vertex culling is performed</param>
 		public abstract void OptimizeObject(bool PreserveVerticies, int Threshold, bool VertexCulling);
 
+		/// <summary>Creates a transformed copy of the object (e.g. platform roof, crack etc)</summary>
+		/// <param name="d0">The width at the near end</param>
+		/// <param name="d1">The width at the far end</param>
+		public abstract UnifiedObject CreateTransformedObject(double d0, double d1);
+		
 		/// <summary>Creates a clone of this object</summary>
 		/// <returns>The cloned object</returns>
 		public abstract UnifiedObject Clone();

@@ -24,6 +24,8 @@ namespace OpenBve {
 			internal OpenBveApi.Sounds.SoundInterface Sound;
 			/// <summary>The interface to load objects as exposed by the plugin, or a null reference.</summary>
 			internal OpenBveApi.Objects.ObjectInterface Object;
+			/// <summary>The interface to load objects as exposed by the plugin, or a null reference.</summary>
+			internal OpenBveApi.Routes.RouteInterface Route;
 			// --- constructors ---
 			/// <summary>Creates a new instance of this class.</summary>
 			/// <param name="file">The plugin file.</param>
@@ -47,6 +49,9 @@ namespace OpenBve {
 					this.Object.SetObjectParser(Interface.CurrentOptions.CurrentXParser);
 					this.Object.SetObjectParser(Interface.CurrentOptions.CurrentObjParser);
 				}
+				if (this.Route != null) {
+					this.Route.Load(Program.CurrentHost, Program.FileSystem);
+				}
 			}
 			/// <summary>Unloads all interfaces this plugin supports.</summary>
 			internal void Unload() {
@@ -56,9 +61,11 @@ namespace OpenBve {
 				if (this.Sound != null) {
 					this.Sound.Unload();
 				}
-				if (this.Object != null)
-				{
+				if (this.Object != null) {
 					this.Object.Unload();
+				}
+				if (this.Route != null) {
+					this.Route.Unload();
 				}
 			}
 		}
@@ -120,6 +127,9 @@ namespace OpenBve {
 							}
 							if (type.IsSubclassOf(typeof(OpenBveApi.Objects.ObjectInterface))) {
 								plugin.Object = (OpenBveApi.Objects.ObjectInterface)assembly.CreateInstance(type.FullName);
+							}
+							if (type.IsSubclassOf(typeof(OpenBveApi.Routes.RouteInterface))) {
+								plugin.Route = (OpenBveApi.Routes.RouteInterface)assembly.CreateInstance(type.FullName);
 							}
 							if (typeof(OpenBveApi.Runtime.IRuntime).IsAssignableFrom(type)) {
 								iruntime = true;
